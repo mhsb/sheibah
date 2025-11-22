@@ -1,0 +1,5 @@
+{
+  "name": "Persian Mobile Doc Converter",
+  "description": "A modern tool to convert Persian Word documents into mobile-friendly formats (DOCX/PDF) with optimized margins and typography.",
+  "requestFramePermissions": []
+}

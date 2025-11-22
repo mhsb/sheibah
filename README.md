@@ -1,42 +1,20 @@
-# Word Mobile Formatter
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Converts Word documents to mobile-friendly format (11x23cm) with adjusted footnotes.
+# Run and deploy your AI Studio app
 
-## 🚀 Quick Start
+This contains everything you need to run your app locally.
 
-1. **Requirements**:
-   - Windows with Microsoft Word installed
-   - Python 3.6+
+View your app in AI Studio: https://ai.studio/apps/drive/1Xl79mK2u8QsyVBGvNEtpU28RVmuSDEPv
 
-2. **Installation**:
-   ```bash
-   pip install -r requirements.txt
-Usage:
+## Run Locally
 
-bash
-python mobile_formatter.py
-🌐 Web Alternative
-For quick conversion without Word, use our online tool.
+**Prerequisites:**  Node.js
 
-📁 File Structure
-Put .docx files in the same folder as the script.
-Processed files will be saved as *_mobile.docx and *_mobile.pdf.
 
-text
-
-**requirements.txt:**
-pywin32>=300
-
-text
-
-### 4. **Deploy as Web Service** (Advanced)
-If you want a true web solution, consider:
-
-- **Google Apps Script** with Google Docs API
-- **Microsoft Graph API** (requires Office 365)
-- **LibreOffice in Docker** on a cloud server
-
-## Quick Win:
-For now, I'd recommend **Option 2** - create the GitHub repo with your current script and clear instructions. Most users who need this functionality will have Word available.
-
-Would you like me to help you set up any of these alternatives?
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
