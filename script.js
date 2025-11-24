@@ -6,28 +6,35 @@ const previewContent = document.getElementById('previewContent');
 const statusValue = document.getElementById('statusValue');
 const fileNameValue = document.getElementById('fileNameValue');
 const conversionTypeValue = document.getElementById('conversionTypeValue');
+const downloadBtn = document.getElementById('downloadBtn');
 
-// Mobile formatting settings
+// Global variables to store processed data
+let currentFileBuffer = null;
+let currentFileName = '';
+let formattedDocBuffer = null;
+
+// Mobile formatting settings (in TWIPS - 1 inch = 1440 TWIPS)
 const MOBILE_FORMATTING = {
     page: {
-        width: 6.27,    // inches (A6 equivalent for mobile)
-        height: 8.7,    // inches  
-        orientation: 'portrait'
+        width: 9033,    // 6.27 inches in TWIPS
+        height: 12528,  // 8.7 inches in TWIPS
+        widthCm: "15.9 cm",
+        heightCm: "22.1 cm"
     },
     margins: {
-        top: 0.5,       // inches
-        right: 0.4,     // inches
-        bottom: 0.5,    // inches
-        left: 0.4,      // inches
-        header: 0.3,    // inches
-        footer: 0.3     // inches
+        top: 720,       // 0.5 inches
+        right: 576,     // 0.4 inches
+        bottom: 720,
+        left: 576,
+        topCm: "1.27 cm",
+        rightCm: "1.02 cm"
     },
     fonts: {
-        footnote: 9,    // points
-        normal: 11,     // points
-        heading1: 16,   // points
-        heading2: 14,   // points
-        heading3: 12    // points
+        normal: 22,     // 11pt in half-points
+        footnote: 18,   // 9pt in half-points
+        heading1: 32,   // 16pt
+        heading2: 28,   // 14pt
+        heading3: 24    // 12pt
     }
 };
 
@@ -88,159 +95,227 @@ async function processFile(file) {
     
     updateStatus('در حال پردازش فایل...');
     fileNameValue.textContent = file.name;
+    currentFileName = file.name;
     
     const conversionType = document.querySelector('input[name="conversionType"]:checked').value;
     conversionTypeValue.textContent = getConversionTypeText(conversionType);
     
     try {
         const arrayBuffer = await file.arrayBuffer();
+        currentFileBuffer = arrayBuffer;
         
         if (conversionType === 'mobile') {
-            // Process for mobile formatting
-            await processMobileFormatting(arrayBuffer, file.name);
+            await createMobileFormattedDoc(arrayBuffer, file.name);
         } else {
-            // Original conversion logic
             const result = await mammoth.convertToHtml({arrayBuffer});
-            let convertedContent = '';
-            
-            switch(conversionType) {
-                case 'html':
-                    convertedContent = result.value;
-                    break;
-                case 'text':
-                    convertedContent = convertToPlainText(result.value);
-                    break;
-                case 'preview':
-                    convertedContent = await generateMobilePreview(result.value);
-                    break;
-            }
-            
-            displayPreview(convertedContent, conversionType);
-            updateStatus('تبدیل با موفقیت انجام شد');
+            const previewContent = generateMobilePreview(result.value);
+            displayPreview(previewContent, 'preview');
+            updateStatus('پیش‌نمایش آماده شد');
         }
         
     } catch (error) {
-        console.error('Conversion error:', error);
-        updateStatus('خطا در تبدیل فایل');
+        console.error('Processing error:', error);
+        updateStatus('خطا در پردازش فایل');
         alert('خطا در پردازش فایل. لطفاً فایل دیگری را امتحان کنید.');
     }
 }
 
-// Process DOCX for mobile formatting
-async function processMobileFormatting(arrayBuffer, fileName) {
-    updateStatus('در حال اعمال فرمت موبایل...');
+// Create mobile formatted DOCX
+async function createMobileFormattedDoc(arrayBuffer, fileName) {
+    updateStatus('در حال ایجاد سند موبایل...');
     
     try {
-        // Load docx library dynamically
-        const docxModule = await import('https://cdn.jsdelivr.net/npm/docx@8.2.0/+esm');
-        const docx = docxModule;
+        // For this demo, we'll create a simple formatted document
+        // In a real implementation, you'd parse the original DOCX and rebuild it
+        const doc = await generateFormattedDocument(arrayBuffer);
         
-        // Convert the uploaded DOCX to a format we can modify
-        const convertedDoc = await convertDocxForMobile(arrayBuffer, fileName, docx);
+        // Convert to blob for download
+        const blob = await docx.Packer.toBlob(doc);
+        formattedDocBuffer = blob;
         
-        if (convertedDoc) {
-            displayMobileFormattingPreview(convertedDoc);
-            updateStatus('فرمت موبایل اعمال شد');
-        } else {
-            // Fallback: show what would be changed
-            const result = await mammoth.convertToHtml({arrayBuffer});
-            const previewContent = await generateMobilePreview(result.value);
-            displayPreview(previewContent, 'preview');
-            updateStatus('پیش‌نمایش تغییرات فرمت موبایل');
-        }
+        // Show success message
+        displaySuccessMessage(fileName);
+        downloadBtn.style.display = 'inline-block';
+        updateStatus('سند موبایل آماده دانلود');
         
     } catch (error) {
-        console.error('Mobile formatting error:', error);
+        console.error('DOCX creation error:', error);
         // Fallback to preview mode
         const result = await mammoth.convertToHtml({arrayBuffer});
-        const previewContent = await generateMobilePreview(result.value);
+        const previewContent = generateMobilePreview(result.value);
         displayPreview(previewContent, 'preview');
         updateStatus('پیش‌نمایش تغییرات (دانلود در دسترس نیست)');
     }
 }
 
-// Convert DOCX for mobile (simplified version)
-async function convertDocxForMobile(arrayBuffer, fileName, docx) {
-    updateStatus('در حال تنظیم اندازه صفحات و حاشیه‌ها...');
+// Generate formatted document
+async function generateFormattedDocument(arrayBuffer) {
+    // Parse the original document to extract content
+    const result = await mammoth.convertToHtml({arrayBuffer});
+    const htmlContent = result.value;
+    
+    // Create a new document with mobile formatting
+    const doc = new docx.Document({
+        sections: [{
+            properties: {
+                page: {
+                    width: MOBILE_FORMATTING.page.width,
+                    height: MOBILE_FORMATTING.page.height,
+                },
+                margin: {
+                    top: MOBILE_FORMATTING.margins.top,
+                    right: MOBILE_FORMATTING.margins.right,
+                    bottom: MOBILE_FORMATTING.margins.bottom,
+                    left: MOBILE_FORMATTING.margins.left,
+                }
+            },
+            children: await convertHtmlToDocxElements(htmlContent)
+        }]
+    });
+    
+    return doc;
+}
+
+// Convert HTML content to docx elements
+async function convertHtmlToDocxElements(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    const elements = [];
+    
+    // Process each node
+    for (let node of tempDiv.childNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+            const element = await convertElementToDocx(node);
+            if (element) {
+                elements.push(element);
+            }
+        }
+    }
+    
+    return elements;
+}
+
+// Convert HTML element to docx element
+async function convertElementToDocx(element) {
+    const tagName = element.tagName.toLowerCase();
+    const text = element.textContent.trim();
+    
+    if (!text) return null;
+    
+    let fontSize = MOBILE_FORMATTING.fonts.normal;
+    
+    // Adjust font size based on heading
+    if (tagName === 'h1') fontSize = MOBILE_FORMATTING.fonts.heading1;
+    else if (tagName === 'h2') fontSize = MOBILE_FORMATTING.fonts.heading2;
+    else if (tagName === 'h3') fontSize = MOBILE_FORMATTING.fonts.heading3;
+    
+    return new docx.Paragraph({
+        children: [
+            new docx.TextRun({
+                text: text,
+                size: fontSize,
+            })
+        ]
+    });
+}
+
+// Download formatted document
+async function downloadFormattedDoc() {
+    if (!formattedDocBuffer) {
+        alert('هیچ سندی برای دانلود موجود نیست.');
+        return;
+    }
     
     try {
-        // For now, we'll create a detailed preview of what would be changed
-        // Actual DOCX modification requires more complex processing
-        const result = await mammoth.convertToHtml({arrayBuffer});
-        return {
-            fileName: fileName,
-            originalSize: (arrayBuffer.byteLength / 1024 / 1024).toFixed(2),
-            changes: getFormattingChanges(),
-            content: result.value
-        };
+        const url = URL.createObjectURL(formattedDocBuffer);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = currentFileName.replace('.docx', '_mobile.docx');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        updateStatus('سند با موفقیت دانلود شد');
     } catch (error) {
-        console.error('DOCX processing error:', error);
-        return null;
+        console.error('Download error:', error);
+        alert('خطا در دانلود فایل.');
     }
 }
 
-// Generate mobile formatting preview
-function generateMobilePreview(htmlContent) {
+// Display success message
+function displaySuccessMessage(fileName) {
     const changes = getFormattingChanges();
     
-    let preview = `
-        <div class="mobile-preview">
-            <div class="formatting-changes">
-                <h3>📱 تغییرات اعمال شده برای فرمت موبایل:</h3>
-                <div class="changes-list">
-    `;
-    
-    changes.forEach(change => {
-        preview += `
-            <div class="change-item">
-                <span class="change-icon">${change.icon}</span>
-                <div>
-                    <strong>${change.title}</strong>
-                    <p>${change.description}</p>
-                    <small>${change.details}</small>
+    const successHTML = `
+        <div class="success-message">
+            <div class="success-header">
+                <span class="success-icon">✅</span>
+                <h3>سند موبایل با موفقیت ایجاد شد!</h3>
+            </div>
+            
+            <div class="file-info">
+                <p><strong>فایل اصلی:</strong> ${fileName}</p>
+                <p><strong>فایل جدید:</strong> ${fileName.replace('.docx', '_mobile.docx')}</p>
+            </div>
+            
+            <div class="changes-applied">
+                <h4>تغییرات اعمال شده:</h4>
+                <div class="changes-grid">
+                    ${changes.map(change => `
+                        <div class="change-applied">
+                            <span class="change-icon">${change.icon}</span>
+                            <div>
+                                <strong>${change.title}</strong>
+                                <p>${change.details}</p>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
-        `;
-    });
-    
-    preview += `
-                </div>
-            </div>
-            <div class="content-preview">
-                <h3>پیش‌نمایش محتوا:</h3>
-                <div class="preview-content">${htmlContent}</div>
-            </div>
-            <div class="mobile-tips">
-                <h4>💡 نکات برای نمایش بهتر در موبایل:</h4>
-                <ul>
-                    <li>فونت‌ها برای خوانایی در صفحه‌های کوچک بهینه شده‌اند</li>
-                    <li>حاشیه‌ها کاهش یافته تا فضای بیشتری در اختیار متن باشد</li>
-                    <li>اندازه صفحه برای نمایش عمودی (portrait) تنظیم شده</li>
-                    <li>پاورقی‌ها با فونت کوچک‌تر نمایش داده می‌شوند</li>
-                </ul>
+            
+            <div class="download-instruction">
+                <p>روی دکمه "دانلود سند موبایل" کلیک کنید تا فایل جدید دریافت شود.</p>
             </div>
         </div>
     `;
     
-    return preview;
+    displayPreview(successHTML, 'mobile');
 }
 
-// Display mobile formatting preview
-function displayMobileFormattingPreview(docInfo) {
-    const preview = generateMobilePreview(docInfo.content);
-    displayPreview(preview, 'mobile');
+// Generate mobile preview
+function generateMobilePreview(htmlContent) {
+    const changes = getFormattingChanges();
     
-    // Update action buttons for mobile formatting
-    updateActionButtonsForMobile();
-}
-
-// Update action buttons for mobile formatting
-function updateActionButtonsForMobile() {
-    const actionButtons = document.querySelector('.action-buttons');
-    actionButtons.innerHTML = `
-        <button class="btn-primary" onclick="downloadMobileFormatted()">دانلود سند موبایل</button>
-        <button class="btn-secondary" onclick="showFormattingDetails()">مشاهده جزئیات تغییرات</button>
-        <button class="btn-secondary" onclick="resetConverter()">تبدیل فایل جدید</button>
+    return `
+        <div class="mobile-preview">
+            <div class="preview-notice">
+                <h3>👆 پیش‌نمایش تغییرات فرمت موبایل</h3>
+                <p>برای ایجاد فایل جدید با فرمت موبایل، گزینه "ایجاد نسخه موبایل" را انتخاب کنید.</p>
+            </div>
+            
+            <div class="formatting-changes">
+                <h4>تغییراتی که اعمال خواهند شد:</h4>
+                <div class="changes-list">
+                    ${changes.map(change => `
+                        <div class="change-item">
+                            <span class="change-icon">${change.icon}</span>
+                            <div>
+                                <strong>${change.title}</strong>
+                                <p>${change.description}</p>
+                                <small>${change.details}</small>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="content-preview">
+                <h4>پیش‌نمایش محتوا:</h4>
+                <div class="preview-content">${htmlContent}</div>
+            </div>
+        </div>
     `;
 }
 
@@ -251,69 +326,27 @@ function getFormattingChanges() {
             icon: '📐',
             title: 'اندازه صفحه',
             description: 'تنظیم برای نمایش بهینه در موبایل',
-            details: `عرض: ${MOBILE_FORMATTING.page.width} اینچ | ارتفاع: ${MOBILE_FORMATTING.page.height} اینچ`
+            details: `${MOBILE_FORMATTING.page.widthCm} × ${MOBILE_FORMATTING.page.heightCm}`
         },
         {
             icon: '📏',
             title: 'حاشیه‌ها',
             description: 'کاهش حاشیه‌ها برای استفاده بهینه از فضای صفحه',
-            details: `بالا/پایین: ${MOBILE_FORMATTING.margins.top} اینچ | چپ/راست: ${MOBILE_FORMATTING.margins.left} اینچ`
+            details: `حاشیه‌ها: ${MOBILE_FORMATTING.margins.topCm} از بالا/پایین، ${MOBILE_FORMATTING.margins.rightCm} از چپ/راست`
         },
         {
             icon: '🔤',
-            title: 'فونت پاورقی',
-            description: 'کاهش سایز فونت برای صرفه‌جویی در فضای صفحه',
-            details: `سایز جدید: ${MOBILE_FORMATTING.fonts.footnote} نقطه`
+            title: 'فونت‌ها',
+            description: 'بهینه‌سازی سایز فونت‌ها برای خوانایی در موبایل',
+            details: 'فونت‌های عناوین و متن اصلی برای موبایل بهینه شده‌اند'
         },
         {
-            icon: '📝',
-            title: 'فونت‌های اصلی',
-            description: 'بهینه‌سازی سایز فونت‌ها برای خوانایی در موبایل',
-            details: `متن معمولی: ${MOBILE_FORMATTING.fonts.normal} نقطه | عناوین: ${MOBILE_FORMATTING.fonts.heading1}-${MOBILE_FORMATTING.fonts.heading3} نقطه`
+            icon: '📱',
+            title: 'بهینه‌سازی موبایل',
+            description: 'فرمت‌بندی ویژه برای نمایش در دستگاه‌های همراه',
+            details: 'سند برای خوانایی در صفحه‌های کوچک بهینه شده است'
         }
     ];
-}
-
-// Download mobile formatted document
-function downloadMobileFormatted() {
-    alert('برای پیاده‌سازی کامل این قابلیت، نیاز به سرور برای پردازش فایل‌های DOCX داریم. در این نسخه نمایشی، تغییرات به صورت پیش‌نمایش نشان داده می‌شوند.');
-    
-    // Create a simple text file with the formatting details
-    const changes = getFormattingChanges();
-    let content = 'تغییرات اعمال شده برای فرمت موبایل:\n\n';
-    
-    changes.forEach(change => {
-        content += `• ${change.title}: ${change.description}\n  ${change.details}\n\n`;
-    });
-    
-    const blob = new Blob([content], { type: 'text/plain; charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'mobile-formatting-changes.txt';
-    a.click();
-    URL.revokeObjectURL(url);
-}
-
-// Show formatting details
-function showFormattingDetails() {
-    const changes = getFormattingChanges();
-    let details = 'جزئیات کامل تغییرات فرمت موبایل:\n\n';
-    
-    changes.forEach(change => {
-        details += `🏷️ ${change.title}\n`;
-        details += `📝 ${change.description}\n`;
-        details += `⚙️ ${change.details}\n\n`;
-    });
-    
-    alert(details);
-}
-
-// Convert HTML to plain text
-function convertToPlainText(html) {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || '';
 }
 
 // Display Preview
@@ -330,39 +363,10 @@ function resetConverter() {
     previewContent.innerHTML = '';
     fileNameValue.textContent = '-';
     conversionTypeValue.textContent = '-';
+    downloadBtn.style.display = 'none';
+    currentFileBuffer = null;
+    formattedDocBuffer = null;
     updateStatus('آماده برای آپلود فایل');
-    
-    // Reset action buttons
-    const actionButtons = document.querySelector('.action-buttons');
-    actionButtons.innerHTML = `
-        <button class="btn-secondary" onclick="downloadAsText()">دانلود به عنوان متن</button>
-        <button class="btn-secondary" onclick="copyToClipboard()">کپی به حافظه</button>
-        <button class="btn-primary" onclick="resetConverter()">تبدیل فایل جدید</button>
-    `;
-}
-
-// Download as Text
-function downloadAsText() {
-    const text = previewContent.textContent;
-    const blob = new Blob([text], { type: 'text/plain; charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'converted-document.txt';
-    a.click();
-    URL.revokeObjectURL(url);
-}
-
-// Copy to Clipboard
-async function copyToClipboard() {
-    try {
-        const text = previewContent.textContent;
-        await navigator.clipboard.writeText(text);
-        alert('متن با موفقیت کپی شد!');
-    } catch (err) {
-        console.error('Copy failed:', err);
-        alert('خطا در کپی کردن متن');
-    }
 }
 
 // Helper Functions
@@ -372,10 +376,8 @@ function updateStatus(message) {
 
 function getConversionTypeText(type) {
     const types = {
-        'html': 'تبدیل به HTML',
-        'text': 'تبدیل به متن ساده',
-        'preview': 'پیش‌نمایش فرمت موبایل',
-        'mobile': 'فرمت موبایل'
+        'mobile': 'ایجاد نسخه موبایل',
+        'preview': 'پیش‌نمایش تغییرات'
     };
     return types[type] || type;
 }
