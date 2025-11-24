@@ -1,20 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// If you're deploying to https://mhsb.github.io/repository-name/
-// use base: '/repository-name/'
-// If you're deploying to https://mhsb.github.io/ (user site)
-// use base: '/'
-
 export default defineConfig({
   plugins: [react()],
-  base: '/', // Change this if deploying to project site
-  server: {
-    port: 3000,
-  },
+  base: '/', // Change this to '/your-repo-name/' if using project site
   build: {
     outDir: 'dist',
-    sourcemap: true
+    sourcemap: true,
+    assetsDir: 'assets', // This organizes CSS in assets folder
   },
   define: {
     'process.env': {},
