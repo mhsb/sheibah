@@ -7,12 +7,14 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <!-- Add docx library -->
+    <script src="https://cdn.jsdelivr.net/npm/docx@8.2.0/build/index.browser.js"></script>
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1>مبدل سند موبایل</h1>
-            <p>تبدیل اسناد DOCX به فرمت‌های مختلف با قابلیت‌های پیشرفته</p>
+            <p>تبدیل اسناد DOCX به فرمت بهینه شده برای موبایل</p>
         </header>
 
         <main class="main-content">
@@ -34,42 +36,37 @@
                 </div>
             </section>
 
-            <!-- Conversion Options -->
+            <!-- Processing Options -->
             <section class="options-section">
                 <h3>گزینه‌های تبدیل</h3>
                 <div class="options-grid">
                     <label class="option-item">
                         <input type="radio" name="conversionType" value="mobile" checked>
-                        <span>فرمت موبایل (اصلی)</span>
+                        <span>ایجاد نسخه موبایل (جدید)</span>
                     </label>
                     <label class="option-item">
                         <input type="radio" name="conversionType" value="preview">
                         <span>پیش‌نمایش تغییرات</span>
-                    </label>
-                    <label class="option-item">
-                        <input type="radio" name="conversionType" value="html">
-                        <span>تبدیل به HTML</span>
-                    </label>
-                    <label class="option-item">
-                        <input type="radio" name="conversionType" value="text">
-                        <span>تبدیل به متن ساده</span>
                     </label>
                 </div>
             </section>
 
             <!-- Preview Section -->
             <section class="preview-section" id="previewSection" style="display: none;">
-                <h3>پیش‌نمایش</h3>
+                <h3>نتایج تبدیل</h3>
                 <div class="preview-container">
                     <div class="preview-content" id="previewContent">
-                        <!-- Converted content will appear here -->
+                        <!-- Results will appear here -->
                     </div>
                 </div>
                 
                 <div class="action-buttons">
-                    <button class="btn-secondary" onclick="downloadAsText()">دانلود به عنوان متن</button>
-                    <button class="btn-secondary" onclick="copyToClipboard()">کپی به حافظه</button>
-                    <button class="btn-primary" onclick="resetConverter()">تبدیل فایل جدید</button>
+                    <button class="btn-primary" onclick="downloadFormattedDoc()" id="downloadBtn" style="display: none;">
+                        دانلود سند موبایل
+                    </button>
+                    <button class="btn-secondary" onclick="resetConverter()">
+                        تبدیل فایل جدید
+                    </button>
                 </div>
             </section>
 
