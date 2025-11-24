@@ -1,13 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+// If deploying to https://username.github.io/repository-name/
+// use base: '/repository-name/'
+// If deploying to https://username.github.io/ (user site)
+// use base: '/'
+
 export default defineConfig({
   plugins: [react()],
-  base: '/', // Change this to '/your-repo-name/' if using project site
+  base: '/', // Change this based on your GitHub Pages URL
   build: {
     outDir: 'dist',
-    sourcemap: true,
-    assetsDir: 'assets', // This organizes CSS in assets folder
+    sourcemap: false
   },
   define: {
     'process.env': {},
@@ -19,8 +23,5 @@ export default defineConfig({
       stream: 'stream-browserify',
       util: 'util',
     },
-  },
-  optimizeDeps: {
-    include: ['buffer', 'stream-browserify', 'util']
   }
 })
