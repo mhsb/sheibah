@@ -1,26 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './index.css'  // Add this line
 
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
-}
+// Add global polyfills
+window.global = window
+window.Buffer = window.Buffer || require('buffer').Buffer
+window.process = window.process || require('process')
 
-try {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-} catch (error) {
-  console.error("Application crashed:", error);
-  rootElement.innerHTML = `
-    <div style="padding: 20px; color: red; text-align: center; direction: ltr;">
-      <h1>Application Error</h1>
-      <p>Failed to start the application.</p>
-      <pre>${error instanceof Error ? error.message : String(error)}</pre>
-    </div>
-  `;
-}
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+)
+
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
