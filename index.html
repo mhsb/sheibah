@@ -6,25 +6,15 @@
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="مبدل سند موبایل - تبدیل اسناد با قابلیت‌های پیشرفته">
     <title>مبدل سند موبایل | Persian Mobile Doc</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Vazirmatn', 'sans-serif'],
-            }
-          }
-        }
-      }
-    </script>
+    
+    <!-- Remove Tailwind CDN - we'll use Vite -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    
     <style>
       body {
         font-family: 'Vazirmatn', sans-serif;
       }
-      /* Custom scrollbar */
+      /* Your custom styles remain the same */
       ::-webkit-scrollbar { width: 8px; }
       ::-webkit-scrollbar-track { background: #f1f1f1; }
       .dark ::-webkit-scrollbar-track { background: #1f2937; }
@@ -42,53 +32,6 @@
       }
       .dark #loading-screen { color: #e5e7eb; }
     </style>
-    
-    <!-- 1. Global Polyfills -->
-    <script>
-      window.global = window;
-      window.process = {
-        env: { NODE_ENV: 'production' },
-        version: 'v16.0.0',
-        nextTick: (cb) => setTimeout(cb, 0),
-        browser: true,
-        argv: [],
-        cwd: () => '/'
-      };
-    </script>
-
-    <!-- 2. Load Buffer -->
-    <script src="https://cdn.jsdelivr.net/npm/buffer@6.0.3/index.min.js"></script>
-    <script>
-      if (window.buffer && window.buffer.Buffer) {
-        window.Buffer = window.buffer.Buffer;
-        window.Buffer.isBuffer = function(obj) {
-            return obj instanceof Uint8Array || (obj && obj.constructor && obj.constructor.name === 'Buffer');
-        };
-      }
-    </script>
-
-    <!-- 3. Import Map -->
-    <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@18.2.0",
-    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-    "mammoth": "https://esm.sh/mammoth@1.6.0",
-    "docx": "https://esm.sh/docx@8.2.0",
-    "@google/genai": "https://esm.sh/@google/genai@0.1.1",
-    "buffer": "data:text/javascript;charset=utf-8,export const Buffer = window.Buffer; export const isBuffer = window.Buffer.isBuffer; export default window.Buffer;",
-    "node:buffer": "data:text/javascript;charset=utf-8,export const Buffer = window.Buffer; export const isBuffer = window.Buffer.isBuffer; export default window.Buffer;",
-    "stream": "https://esm.sh/stream-browserify@3.0.0",
-    "node:stream": "https://esm.sh/stream-browserify@3.0.0",
-    "readable-stream": "https://esm.sh/readable-stream@3.6.2",
-    "util": "https://esm.sh/util@0.12.5",
-    "events": "https://esm.sh/events@3.3.0",
-    "process": "https://esm.sh/process@0.11.10",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
-  }
-}
-</script>
   </head>
   <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
     <div id="root">
@@ -98,8 +41,8 @@
         <span>در حال راه‌اندازی...</span>
       </div>
     </div>
-    <script type="module">
-      import './index.tsx';
-    </script>
+    
+    <!-- Change this to point to your main TSX file -->
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
