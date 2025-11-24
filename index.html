@@ -1,53 +1,107 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="مبدل سند موبایل - تبدیل اسناد با قابلیت‌های پیشرفته">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مبدل سند موبایل | Persian Mobile Doc</title>
-    
-    <!-- Vazirmatn Font -->
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    
-    <style>
-      body {
-        font-family: 'Vazirmatn', sans-serif;
-        margin: 0;
-        padding: 0;
-      }
-      #loading-screen {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        flex-direction: column;
-        gap: 1rem;
-        color: #4b5563;
-      }
-      .dark #loading-screen {
-        color: #e5e7eb;
-      }
-      .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 4px solid #e5e7eb;
-        border-top-color: #3b82f6;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root">
-      <div id="loading-screen">
-        <div class="loading-spinner"></div>
-        <span>در حال راه‌اندازی برنامه...</span>
-      </div>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet">
+    <!-- Mammoth.js for DOCX to HTML conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>مبدل سند موبایل</h1>
+            <p>تبدیل اسناد DOCX به فرمت‌های مختلف با قابلیت‌های پیشرفته</p>
+        </header>
+
+        <main class="main-content">
+            <!-- File Upload Section -->
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" accept=".docx,.doc" style="display: none;">
+                    <div class="upload-placeholder">
+                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <h3>فایل DOCX خود را اینجا رها کنید</h3>
+                        <p>یا برای انتخاب فایل کلیک کنید</p>
+                        <button class="btn-primary" onclick="document.getElementById('fileInput').click()">
+                            انتخاب فایل
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Conversion Options -->
+            <section class="options-section">
+                <h3>گزینه‌های تبدیل</h3>
+                <div class="options-grid">
+                    <label class="option-item">
+                        <input type="radio" name="conversionType" value="html" checked>
+                        <span>تبدیل به HTML</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="conversionType" value="text">
+                        <span>تبدیل به متن ساده</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="radio" name="conversionType" value="summary">
+                        <span>خلاصه‌سازی هوشمند</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="preview-section" id="previewSection" style="display: none;">
+                <h3>پیش‌نمایش</h3>
+                <div class="preview-container">
+                    <div class="preview-content" id="previewContent">
+                        <!-- Converted content will appear here -->
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-secondary" onclick="downloadAsText()">دانلود به عنوان متن</button>
+                    <button class="btn-secondary" onclick="copyToClipboard()">کپی به حافظه</button>
+                    <button class="btn-primary" onclick="resetConverter()">تبدیل فایل جدید</button>
+                </div>
+            </section>
+
+            <!-- Status Cards -->
+            <section class="status-section">
+                <div class="status-grid">
+                    <div class="status-card">
+                        <div class="status-icon">📊</div>
+                        <div class="status-info">
+                            <span class="status-label">وضعیت</span>
+                            <span class="status-value" id="statusValue">آماده</span>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-icon">📄</div>
+                        <div class="status-info">
+                            <span class="status-label">نام فایل</span>
+                            <span class="status-value" id="fileNameValue">-</span>
+                        </div>
+                    </div>
+                    <div class="status-card">
+                        <div class="status-icon">⚡</div>
+                        <div class="status-info">
+                            <span class="status-label">نوع تبدیل</span>
+                            <span class="status-value" id="conversionTypeValue">-</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+    <!-- Dark Mode Toggle -->
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+
+    <script src="script.js"></script>
+</body>
 </html>
