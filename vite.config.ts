@@ -8,7 +8,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/', // Change this based on your GitHub Pages URL
+  base: '/sheibah/', // Change this based on your GitHub Pages URL
   build: {
     outDir: 'dist',
     sourcemap: false
