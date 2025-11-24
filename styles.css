@@ -428,3 +428,101 @@ body.dark {
 .dark .mobile-tips li {
     color: #6ee7b7;
 }
+/* Success Message Styles */
+.success-message {
+    direction: rtl;
+}
+
+.success-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #ecfdf5;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.dark .success-header {
+    background: #064e3b;
+}
+
+.success-icon {
+    font-size: 2rem;
+}
+
+.success-header h3 {
+    color: #065f46;
+    margin: 0;
+}
+
+.dark .success-header h3 {
+    color: #34d399;
+}
+
+.file-info {
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.dark .file-info {
+    background: #1e293b;
+}
+
+.file-info p {
+    margin: 5px 0;
+}
+
+.changes-applied {
+    margin-bottom: 20px;
+}
+
+.changes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.change-applied {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    border-right: 4px solid #10b981;
+}
+
+.dark .change-applied {
+    background: #334155;
+}
+
+.change-applied .change-icon {
+    font-size: 1.5rem;
+}
+
+.download-instruction {
+    background: #dbeafe;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.dark .download-instruction {
+    background: #1e3a8a;
+}
+
+/* Preview Notice */
+.preview-notice {
+    background: #fef3c7;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.dark .preview-notice {
+    background: #78350f;
+}
