@@ -1,0 +1,23 @@
+/* Design tokens — single source for colors & type (accent: deep green placeholder) */
+:root {
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-fg: #111318;
+  --color-muted: #5b6069;
+  --color-accent: #14532d;      /* deep green — final pick pending design pass */
+  --color-accent-fg: #ffffff;
+  --color-border: #e4e7eb;
+  --color-surface: #f7f8f9;
+
+  /* Type */
+  --font-sans: "Inter Variable", "Inter", system-ui, sans-serif;
+  --font-fa: "Vazirmatn", "Tahoma", sans-serif;
+  --font-size-base: 1rem;
+  --line-height-base: 1.7;
+
+  /* Spacing / layout */
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-8: 2rem;
+  --content-width: 64rem;
+}
