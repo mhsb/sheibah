@@ -1,4 +1,4 @@
-````markdown
+
 # PRD — sheibah.ir · Personal Brand Site & Archive
 
 **Owner:** Hosein Sheibah
@@ -230,4 +230,4 @@ Three content collections, stored as **markdown + front-matter in the repo**. UI
 | 11 | Contact | Link pool (campsite.bio-style); Telegram/Eitaa primary; email in footer only |
 | 12 | Stack | Astro + GitHub + Cloudflare Pages + Sveltia/Decap (owner delegated choice) |
 | 13 | Domain | sheibah.ir at iranserver; DNS → Cloudflare |
-````
+
