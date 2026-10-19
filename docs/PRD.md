@@ -1,5 +1,3 @@
-All eight questions are done — that's everything I need. Here's the complete PRD, ready to save as **`docs/PRD.md`** in the project repo:
-
 ````markdown
 # PRD — sheibah.ir · Personal Brand Site & Archive
 
@@ -233,5 +231,3 @@ Three content collections, stored as **markdown + front-matter in the repo**. UI
 | 12 | Stack | Astro + GitHub + Cloudflare Pages + Sveltia/Decap (owner delegated choice) |
 | 13 | Domain | sheibah.ir at iranserver; DNS → Cloudflare |
 ````
-
-**Before we can start building, the open items are exactly the checklist in §15** — most critically the social URLs, the bio (I'm happy to draft it with you), and initial content for the three archives. whenever you're ready, send those over and we move to the build phase.
