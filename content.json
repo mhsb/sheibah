@@ -1,0 +1,30 @@
+{
+  "repo": "USERNAME/REPO",
+  "branch": "main",
+  "profile": {
+    "brandFa": "شیبه",
+    "nameFa": "حسین شیبه",
+    "nameEn": "Hosein Sheibah",
+    "tagline": { "en": "Hawzah studies, translation, and code.", "fa": "مطالعات حوزوی، ترجمه و برنامه‌نویسی" },
+    "bio": {
+      "en": "Placeholder bio. Replace it from the admin page.",
+      "fa": "متن موقت. از صفحه‌ی ادمین جایگزینش کنید."
+    }
+  },
+  "links": [
+    { "label": "Telegram", "url": "https://t.me/CHANGE_ME" },
+    { "label": "Eitaa", "url": "https://eitaa.com/CHANGE_ME" },
+    { "label": "GitHub", "url": "https://github.com/CHANGE_ME" },
+    { "label": "LinkedIn", "url": "https://www.linkedin.com/in/CHANGE_ME" }
+  ],
+  "notes": [
+    { "title": "نمونه‌ی یادداشت درسی", "date": "2026-01-15", "lang": "fa", "body": "این یک یادداشت نمونه است.\n\nپاراگراف دوم. پیش از انتشار حذفش کنید." }
+  ],
+  "translations": [
+    { "title": "Sample translation", "desc": { "en": "Placeholder entry.", "fa": "نمونه‌ی موقت." }, "url": "https://example.com" }
+  ],
+  "projects": [
+    { "name": "inarobegir", "desc": { "en": "Placeholder description.", "fa": "توضیح موقت." }, "url": "" },
+    { "name": "sunclock", "desc": { "en": "Placeholder description.", "fa": "توضیح موقت." }, "url": "" }
+  ]
+}
