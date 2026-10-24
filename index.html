@@ -43,6 +43,20 @@ label{display:block;margin-bottom:.75rem;font-weight:500}input,textarea,select{d
 .item{border:1px solid var(--line);border-radius:4px;padding:.75rem;margin-bottom:.75rem;background:var(--surface)}.item summary{font-weight:600}
 .sec{margin-block:1.5rem}.sec>h2{font-size:1.25rem}.danger{color:#9b1c1c;border-color:#9b1c1c}#msg{font-weight:600}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+:root{--on:#fff;--shadow:0 1px 2px rgba(22,32,28,.06),0 10px 24px -14px rgba(22,32,28,.22)}
+@media(prefers-color-scheme:dark){:root{--paper:#0e1512;--surface:#16201c;--ink:#e9f0ec;--soft:#a5b4ad;--line:#2a3933;--accent:#74c9a8;--on:#0e1512;--shadow:0 10px 24px -14px rgba(0,0,0,.6)}}
+html{scroll-behavior:smooth}.skip,.btn{color:var(--on)}.btn.ghost{color:var(--accent)}input,textarea,select{background:var(--surface)}
+header{position:sticky;top:0;z-index:5;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);background:color-mix(in srgb,var(--surface) 88%,transparent)}
+nav a:hover{color:var(--accent)}.btn{transition:transform .15s,box-shadow .15s}.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow);text-decoration:none}
+.logo{display:block;max-width:min(100%,20rem);max-height:12rem;width:auto;height:auto;margin-bottom:.5rem}
+.hero .wrap{padding-block:4rem 3rem}.hero .nm{font-size:clamp(1.4rem,3vw,1.9rem);margin-top:1rem}.cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
+.panel{border-radius:8px;box-shadow:var(--shadow);transition:transform .2s}.panel:hover{transform:translateY(-3px)}
+.panel h2::before{content:'';display:inline-block;width:.55em;height:.55em;border:2px solid var(--accent);transform:rotate(45deg);margin-inline-end:.65em;vertical-align:.05em}
+.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
+.cards>div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1.25rem;box-shadow:var(--shadow);display:flex;flex-direction:column}
+.cards h2{font-size:1.25rem;margin-bottom:.5rem}.cards .btn{margin-top:auto;align-self:flex-start}
+.flinks{list-style:none;margin:0 0 .75rem;padding:0;display:flex;flex-wrap:wrap;gap:1.25rem}.flinks a{color:var(--soft)}.flinks a:hover{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -52,6 +66,7 @@ label{display:block;margin-bottom:.75rem;font-weight:500}input,textarea,select{d
 <footer><div class="wrap" id="ft"></div></footer>
 <noscript><p class="wrap">JavaScript is required to view this site.</p></noscript>
 <script>
+const NOTES=false; /* set to true to bring the lesson-notes section back */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safe=u=>/^https?:\/\//i.test(u||'')?esc(u):'#';
@@ -60,7 +75,7 @@ const U={
 en:{notes:'Notes',translations:'Translations',projects:'Projects',about:'About',cta:'Get in touch',hz:'Hawzah studies',hzB:'Lesson notes from Islamic seminary studies, kept as a growing archive.',hzEn:'Lesson notes are published in Persian.',readFa:'Read the notes in Persian',readN:'Read the notes',tr:'Translation',trB:'Persian-to-English translation of Islamic texts, with samples and links to where each piece is published.',trC:'See translations',cd:'Code',cdB:'Small independent projects, each with its source code and a live demo.',cdC:'See projects',empty:'More coming soon.',more:'More about me',open:'Open',err:'Could not load content.json. Open the site through GitHub Pages or a local web server, not as a plain file.',nI:'Notes from Hawzah lessons, newest first.',tI:'Persian-to-English translation of Islamic texts.',pI:'Small independent projects.',rights:'All rights reserved.'},
 fa:{notes:'یادداشت‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',about:'درباره',cta:'ارتباط با من',hz:'مطالعات حوزوی',hzB:'یادداشت‌های درس‌های حوزوی، در قالب آرشیوی که کم‌کم کامل می‌شود.',hzEn:'',readFa:'',readN:'خواندن یادداشت‌ها',tr:'ترجمه',trB:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی، با نمونه و پیوند به محل انتشار هر اثر.',trC:'مشاهده‌ی ترجمه‌ها',cd:'برنامه‌نویسی',cdB:'پروژه‌های کوچک مستقل، هرکدام با کد منبع و نمونه‌ی زنده.',cdC:'مشاهده‌ی پروژه‌ها',empty:'به‌زودی بیشتر.',more:'بیشتر درباره‌ی من',open:'باز کردن',err:'فایل content.json بارگذاری نشد. سایت را از طریق GitHub Pages یا یک وب‌سرور باز کنید، نه به‌صورت فایل ساده.',nI:'یادداشت‌های درس‌های حوزوی، جدیدترین در ابتدا.',tI:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی.',pI:'پروژه‌های کوچک مستقل.',rights:'همه‌ی حقوق محفوظ است.'}};
 let D=null,E=null,SHA='',OPEN='',L=ls.get('lang')||((navigator.language||'').toLowerCase().startsWith('fa')?'fa':'en'),T=U[L];
-const route=()=>(location.hash||'#home').slice(1);
+const route=()=>{const r=(location.hash||'#home').slice(1);return r==='notes'&&!NOTES?'home':r};
 const pick=o=>(o&&(o[L]||o.en||o.fa))||'';
 const nm=()=>L==='fa'?D.profile.nameFa:D.profile.nameEn;
 const fmt=d=>{try{return new Intl.DateTimeFormat(L==='fa'?'fa-IR-u-ca-persian':'en-GB',{dateStyle:'long',timeZone:'UTC'}).format(new Date(d))}catch{return d||''}};
@@ -74,19 +89,19 @@ const panel=(t,b,items,href,cta,note,lang)=>`<section class="panel"><h2>${t}</h2
 
 const pages={
 home(){const p=D.profile,c=D.links[0],n=notesFor().slice(0,3);
- return `<section class="hero"><div class="wrap"><h1 style="position:absolute;left:-9999px">${esc(nm())}</h1><span class="mark" lang="fa">${esc(p.brandFa)}</span><p class="nm">${esc(nm())}</p><p class="lede">${esc(pick(p.tagline))}</p>${c?`<p><a class="btn" href="${safe(c.url)}"${ext(1)}>${T.cta}</a></p>`:''}</div></section>
- <div class="wrap grid">${panel(T.hz,T.hzB,n.map(x=>[x.title,'#notes']),'#notes',L==='en'&&!n.length?T.readFa:T.readN,L==='en'?T.hzEn:'',L==='en'&&!n.length?'fa':'')}
+ return `<section class="hero"><div class="wrap"><h1 style="position:absolute;left:-9999px">${esc(nm())}</h1><img class="logo" src="logo.png" alt="${esc(p.brandFa)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mark',lang:'fa',textContent:this.alt}))"><p class="nm">${esc(nm())}</p><p class="lede">${esc(pick(p.tagline))}</p><div class="cta-row">${c?`<a class="btn" href="${safe(c.url)}"${ext(1)}>${T.cta}</a>`:''}<a class="btn ghost" href="#about">${T.more}</a></div></div></section>
+ <div class="wrap grid">${NOTES?panel(T.hz,T.hzB,n.map(x=>[x.title,'#notes']),'#notes',L==='en'&&!n.length?T.readFa:T.readN,L==='en'?T.hzEn:'',L==='en'&&!n.length?'fa':''):''}
  ${panel(T.tr,T.trB,D.translations.slice(0,3).map(x=>[x.title,'#translations']),'#translations',T.trC)}
  ${panel(T.cd,T.cdB,D.projects.slice(0,3).map(x=>[x.name,x.url?safe(x.url):'#projects',x.url]),'#projects',T.cdC)}</div>
  <div class="wrap"><p class="lede">${esc((pick(p.bio)||'').split(/\n{2,}/)[0])}</p><p><a href="#about">${T.more}</a></p></div>`},
 notes(){const n=notesFor();return page(T.notes,T.nI,n.length?`<div class="rows">${n.map(x=>`<details><summary><span class="t" dir="${dirOf(x)}">${esc(x.title)}</span><span class="muted">${fmt(x.date)}</span></summary><div class="prose" dir="${dirOf(x)}">${paras(x.body)}</div></details>`).join('')}</div>`:`<p>${L==='en'?`${T.hzEn} <a href="#notes" data-lang="fa">${T.readFa}</a>`:T.empty}</p>`)},
-translations(){return page(T.translations,T.tI,`<div class="rows">${D.translations.map(x=>`<div><h2 dir="auto">${esc(x.title)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
-projects(){return page(T.projects,T.pI,`<div class="rows">${D.projects.map(x=>`<div><h2 dir="ltr">${esc(x.name)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
+translations(){return page(T.translations,T.tI,`<div class="cards">${D.translations.map(x=>`<div><h2 dir="auto">${esc(x.title)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
+projects(){return page(T.projects,T.pI,`<div class="cards">${D.projects.map(x=>`<div><h2 dir="ltr">${esc(x.name)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
 about(){const p=D.profile;return page(esc(nm()),esc(pick(p.tagline)),`<div class="prose" dir="${L==='fa'?'rtl':'ltr'}">${paras(pick(p.bio))}</div><ul class="links">${D.links.map((l,i)=>`<li><a class="btn${i?' ghost':''}" href="${safe(l.url)}"${ext(1)}>${esc(l.label)}</a></li>`).join('')}</ul>`)}};
 
 function chrome(){const r=route();
- $('#hd').innerHTML=`<div class="bar"><a class="brand" href="#home"><b lang="fa">${esc(D?.profile.brandFa||'شیبه')}</b><span>Sheibah</span></a><div class="tg">${L==='en'?'<span aria-current="true">EN</span>':'<button data-lang="en">EN</button>'}<span aria-hidden="true">|</span>${L==='fa'?'<span aria-current="true">فا</span>':'<button data-lang="fa">فا</button>'}</div></div><nav aria-label="Main"><ul>${['notes','translations','projects','about'].map(k=>`<li><a href="#${k}"${r===k?' aria-current="page"':''}>${T[k]}</a></li>`).join('')}</ul></nav>`;
- $('#ft').innerHTML=D?`<p class="muted">© ${new Date().getFullYear()} ${esc(nm())}. ${T.rights}</p>`:''}
+ $('#hd').innerHTML=`<div class="bar"><a class="brand" href="#home"><b lang="fa">${esc(D?.profile.brandFa||'شیبه')}</b><span>Sheibah</span></a><div class="tg">${L==='en'?'<span aria-current="true">EN</span>':'<button data-lang="en">EN</button>'}<span aria-hidden="true">|</span>${L==='fa'?'<span aria-current="true">فا</span>':'<button data-lang="fa">فا</button>'}</div></div><nav aria-label="Main"><ul>${['notes','translations','projects','about'].filter(k=>NOTES||k!=='notes').map(k=>`<li><a href="#${k}"${r===k?' aria-current="page"':''}>${T[k]}</a></li>`).join('')}</ul></nav>`;
+ $('#ft').innerHTML=D?`<ul class="flinks">${D.links.map(l=>`<li><a href="${safe(l.url)}"${ext(1)}>${esc(l.label)}</a></li>`).join('')}</ul><p class="muted">© ${new Date().getFullYear()} ${esc(nm())}. ${T.rights}</p>`:''}
 
 function render(){T=U[L];const h=document.documentElement;h.lang=L;h.dir=L==='fa'?'rtl':'ltr';chrome();const r=route();
  if(!D){$('#main').innerHTML=`<p class="wrap page">${T.err}</p>`;return}
@@ -103,7 +118,7 @@ const SCHEMA=[
 ['links','لینک‌ها','label',[['label','عنوان'],['url','آدرس (با https)']]],
 ['notes','یادداشت‌ها','title',[['title','عنوان'],['date','تاریخ','date'],['lang','زبان متن','sel'],['body','متن (بین پاراگراف‌ها یک خط خالی)','area']]],
 ['translations','ترجمه‌ها','title',[['title','عنوان'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','پیوند انتشار']]],
-['projects','پروژه‌ها','name',[['name','نام'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس']]]];
+['projects','پروژه‌ها','name',[['name','نام'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس']]]].filter(s=>NOTES||s[0]!=='notes');
 const get=(o,p)=>p.split('.').reduce((a,k)=>a?.[k],o);
 const set=(o,p,v)=>{const k=p.split('.'),l=k.pop();k.reduce((a,x)=>a[x]??={},o)[l]=v};
 const api=()=>`https://api.github.com/repos/${D.repo}/contents/content.json`;
