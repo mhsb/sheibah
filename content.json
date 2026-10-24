@@ -52,28 +52,40 @@
   ],
   "projects": [
     {
-      "name": "atlasak",
-      "url": "https://mhsb.github.io/atlasak"
-    },
-    {
-      "name": "manzumak",
-      "url": "https://mhsb.github.io/manzumak"
+      "name": "sunclock",
+      "desc": {
+        "en": "A sunset-to-sunset clock for traditions that begin the day at sunset. It shows the time since (or until) sunset under a sky that follows the real sun, with prayer times and the Hijri date. Everything is calculated on your device, so it works offline, and it can be installed as an app.",
+        "fa": "ساعتی از غروب تا غروب، برای کسانی که روز را از غروب آغاز می‌کنند. مدت زمان گذشته از غروب (یا باقی‌مانده تا آن) را زیر آسمانی نشان می‌دهد که از موقعیت واقعی خورشید پیروی می‌کند؛ همراه با اوقات شرعی و تاریخ قمری. همه‌چیز روی خود دستگاه محاسبه می‌شود، پس بدون اینترنت هم کار می‌کند و می‌شود آن را به‌صورت برنامه نصب کرد."
+      },
+      "url": "",
+      "repo": "https://github.com/mhsb/sunclock"
     },
     {
       "name": "inarobegir",
       "desc": {
-        "en": "Placeholder description.",
-        "fa": "توضیح موقت."
+        "en": "ModernSL: a new way to make shopping lists. A lightweight web app that opens in the browser and can be installed on your phone.",
+        "fa": "ModernSL: شیوه‌ای تازه برای ساختن فهرست خرید. یک وب‌اپ سبک که در مرورگر باز می‌شود و می‌شود آن را روی گوشی نصب کرد."
       },
-      "url": "https://mhsb.github.io/inarobegir"
+      "url": "https://mhsb.github.io/inarobegir/",
+      "repo": "https://github.com/mhsb/inarobegir"
     },
     {
-      "name": "sunclock",
+      "name": "atlasak",
       "desc": {
-        "en": "Placeholder description.",
-        "fa": "توضیح موقت."
+        "en": "A small atlas for children that also works offline, with pages for the world, for Iran, and for countries.",
+        "fa": "یک اطلس کوچک برای کودکان، با قابلیت کار آفلاین؛ شامل صفحه‌هایی برای اطلس جهان، اطلس ایران و کشورها."
       },
-      "url": "https://mhsb.github.io/sunclock"
+      "url": "",
+      "repo": "https://github.com/mhsb/atlasak"
+    },
+    {
+      "name": "manzumak",
+      "desc": {
+        "en": "A 3D solar system for children, made so they can see how the seasons move.",
+        "fa": "یک منظومه‌ی شمسی سه‌بعدی برای کودکان، تا بتوانند حرکت فصل‌ها را ببینند."
+      },
+      "url": "",
+      "repo": "https://github.com/mhsb/manzumak"
     }
   ]
 }
