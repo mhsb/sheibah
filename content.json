@@ -52,6 +52,14 @@
   ],
   "projects": [
     {
+      "name": "atlasak",
+      "url": "https://mhsb.github.io/atlasak"
+    },
+    {
+      "name": "manzumak",
+      "url": "https://mhsb.github.io/manzumak"
+    },
+    {
       "name": "inarobegir",
       "desc": {
         "en": "Placeholder description.",
