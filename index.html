@@ -5,58 +5,56 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Hosein Sheibah · Sheibah</title>
 <meta name="description" content="Hawzah studies, translation, and code.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231d4a3c'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b2a6b'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Vazirmatn:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#f5f8f6;--surface:#fff;--ink:#16201c;--soft:#4a5752;--line:#d3dbd7;--accent:#1d4a3c;--fl:'Inter',system-ui,sans-serif;--ff:'Vazirmatn','Inter',system-ui,sans-serif}
-*{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.65 var(--fl);min-height:100vh;display:flex;flex-direction:column}
-html[lang=fa] body{font-family:var(--ff);line-height:1.9}
+:root{--paper:#f7f2e5;--surface:#fff;--ink:#0b1b3d;--soft:#334155;--line:#d8d0b8;--lapis:#0b2a6b;--turq:#0aa6a6;--turq-d:#05696b;--saff:#f2b134;--ff:'Vazirmatn',system-ui,sans-serif;--fd:'Lalezar','Vazirmatn',system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:1rem/1.8 var(--ff);min-height:100vh;display:flex;flex-direction:column}
 main{flex:1;outline:0}.wrap{max-width:72rem;margin:0 auto;padding-inline:1.25rem}
-a{color:var(--accent)}:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-h1,h2{line-height:1.25;margin:0 0 .75rem;text-wrap:balance}h1{font-size:clamp(1.9rem,4vw,2.5rem)}h2{font-size:1.5rem}
+a{color:var(--turq-d)}:focus-visible{outline:3px solid var(--lapis);outline-offset:3px;border-radius:4px}
+h1,h2{font-family:var(--fd);font-weight:400;line-height:1.3;margin:0 0 .75rem;color:var(--lapis);text-wrap:balance}h1{font-size:clamp(2rem,5vw,2.75rem)}h2{font-size:1.75rem}
 p{margin:0 0 1rem}.muted{color:var(--soft);font-size:.9rem}.lede{font-size:1.15rem;color:var(--soft);max-width:48ch}
-.skip{position:absolute;inset-inline-start:1rem;top:-4rem;background:var(--accent);color:#fff;padding:.5rem 1rem}.skip:focus{top:1rem}
-header{background:var(--surface);border-bottom:1px solid var(--line)}
-.bar{display:flex;justify-content:space-between;align-items:center;padding-block:.9rem .4rem}
-.brand{display:flex;align-items:baseline;gap:.5rem;text-decoration:none;color:var(--ink);font-weight:600}.brand b{font:700 1.75rem var(--ff)}
-nav ul{list-style:none;margin:0;padding:0 0 .4rem;display:flex;gap:1.5rem;overflow-x:auto}
-nav a{display:block;padding:.5rem 0;color:var(--soft);text-decoration:none;font-weight:500;white-space:nowrap}
-nav a[aria-current]{color:var(--ink);box-shadow:inset 0 -2px var(--accent)}
-.tg{display:flex;gap:.5rem;align-items:center;font-size:.9rem;font-weight:600}.tg button{background:none;border:0;padding:.25rem;color:var(--accent);font:inherit;cursor:pointer;text-decoration:underline}
-.btn{display:inline-block;padding:.6rem 1.1rem;border-radius:4px;background:var(--accent);color:#fff;border:1px solid var(--accent);font-family:inherit;font-weight:600;font-size:1rem;text-decoration:none;cursor:pointer}
-.btn.ghost{background:none;color:var(--accent)}.btn:hover{text-decoration:underline}
-.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-.hero::before{content:'';position:absolute;inset:0;opacity:.1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' fill='none' stroke='%231d4a3c'%3E%3Crect x='16' y='16' width='40' height='40'/%3E%3Crect x='16' y='16' width='40' height='40' transform='rotate(45 36 36)'/%3E%3Ccircle cx='36' cy='36' r='9'/%3E%3C/svg%3E");-webkit-mask-image:radial-gradient(ellipse 80% 90% at 100% 0,#000,transparent 72%);mask-image:radial-gradient(ellipse 80% 90% at 100% 0,#000,transparent 72%)}
-html[dir=rtl] .hero::before{transform:scaleX(-1)}.hero .wrap{position:relative;padding-block:3.5rem 2.5rem}
-.mark{display:block;font:700 clamp(5.5rem,26vw,13rem)/1 var(--ff);letter-spacing:-.02em;unicode-bidi:isolate}.hero .nm{font-size:1.25rem;font-weight:600;margin:.75rem 0 .5rem}
-.grid{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));padding-block:2.5rem}
-.panel{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--accent);border-radius:4px;padding:1.5rem;display:flex;flex-direction:column}
-.panel ul{list-style:none;padding:0;margin:0 0 1rem;display:grid;gap:.5rem}.panel a:not(.btn){color:var(--ink);font-weight:500}.act{margin:auto 0 0}
-.page{padding-block:2.5rem 4rem}.rows>*{padding-block:1.25rem;border-bottom:1px solid var(--line)}.rows>*:first-child{border-top:1px solid var(--line)}
-.rows h2{font-size:1.25rem;margin-bottom:.25rem}summary{cursor:pointer;display:flex;justify-content:space-between;gap:1rem;align-items:baseline}summary .t{font-size:1.25rem;font-weight:600}
-.prose{max-width:68ch;font-size:1.125rem;line-height:1.8;padding-top:1rem}.prose[dir=rtl]{font-family:var(--ff);line-height:2.05}
-.links{list-style:none;padding:0;display:grid;gap:.75rem;max-width:26rem}.links .btn{display:block;text-align:center}
-footer{background:var(--surface);border-top:1px solid var(--line);padding-block:1.25rem}footer p{margin:0}
-label{display:block;margin-bottom:.75rem;font-weight:500}input,textarea,select{display:block;width:100%;margin-top:.25rem;padding:.6rem;border:1px solid var(--line);border-radius:4px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:7rem}
-.item{border:1px solid var(--line);border-radius:4px;padding:.75rem;margin-bottom:.75rem;background:var(--surface)}.item summary{font-weight:600}
-.sec{margin-block:1.5rem}.sec>h2{font-size:1.25rem}.danger{color:#9b1c1c;border-color:#9b1c1c}#msg{font-weight:600}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-
-:root{--on:#fff;--shadow:0 1px 2px rgba(22,32,28,.06),0 10px 24px -14px rgba(22,32,28,.22)}
-@media(prefers-color-scheme:dark){:root{--paper:#0e1512;--surface:#16201c;--ink:#e9f0ec;--soft:#a5b4ad;--line:#2a3933;--accent:#74c9a8;--on:#0e1512;--shadow:0 10px 24px -14px rgba(0,0,0,.6)}}
-html{scroll-behavior:smooth}.skip,.btn{color:var(--on)}.btn.ghost{color:var(--accent)}input,textarea,select{background:var(--surface)}
-header{position:sticky;top:0;z-index:5;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);background:color-mix(in srgb,var(--surface) 88%,transparent)}
-nav a:hover{color:var(--accent)}.btn{transition:transform .15s,box-shadow .15s}.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow);text-decoration:none}
-.logo{display:block;max-width:min(100%,20rem);max-height:12rem;width:auto;height:auto;margin-bottom:.5rem}
-.hero .wrap{padding-block:4rem 3rem}.hero .nm{font-size:clamp(1.4rem,3vw,1.9rem);margin-top:1rem}.cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
-.panel{border-radius:8px;box-shadow:var(--shadow);transition:transform .2s}.panel:hover{transform:translateY(-3px)}
-.panel h2::before{content:'';display:inline-block;width:.55em;height:.55em;border:2px solid var(--accent);transform:rotate(45deg);margin-inline-end:.65em;vertical-align:.05em}
-.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
-.cards>div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1.25rem;box-shadow:var(--shadow);display:flex;flex-direction:column}
-.cards h2{font-size:1.25rem;margin-bottom:.5rem}.cards .btn{margin-top:auto;align-self:flex-start}
-.flinks{list-style:none;margin:0 0 .75rem;padding:0;display:flex;flex-wrap:wrap;gap:1.25rem}.flinks a{color:var(--soft)}.flinks a:hover{color:var(--accent)}
+.skip{position:absolute;inset-inline-start:1rem;top:-4rem;background:var(--lapis);color:#fff;padding:.5rem 1rem;z-index:9}.skip:focus{top:1rem}
+header{background:var(--lapis);position:sticky;top:0;z-index:5}header :focus-visible{outline-color:var(--saff)}
+.bar{display:flex;justify-content:space-between;align-items:center;padding-block:.5rem 0}
+.brand{display:flex;align-items:baseline;gap:.5rem;text-decoration:none;color:#fff;font-weight:600}.brand b{font:400 1.9rem var(--fd);color:var(--saff)}
+nav ul{list-style:none;margin:0;padding:0 0 .25rem;display:flex;gap:1.25rem;overflow-x:auto}
+nav a{display:block;padding:.7rem 0;color:#cfe0ff;text-decoration:none;font-weight:600;white-space:nowrap;border-bottom:3px solid transparent}nav a:hover{color:#fff}nav a[aria-current]{color:#fff;border-color:var(--saff)}
+.tg{display:flex;gap:.5rem;align-items:center;font-size:.9rem;font-weight:700;color:#fff}.tg button{background:none;border:0;padding:.7rem .4rem;color:var(--saff);font:inherit;cursor:pointer;text-decoration:underline}
+.hero{position:relative;background:var(--lapis);overflow:hidden;border-radius:0 0 44px 44px;padding-top:2rem}
+.st{position:absolute;top:-110px;right:-120px;animation:sp 70s linear infinite;opacity:.55}.st2{position:absolute;bottom:20px;left:-90px;animation:sp 90s linear infinite reverse;opacity:.4}
+@keyframes sp{to{transform:rotate(360deg)}}
+.hero .wrap{position:relative;display:flex;justify-content:center}
+.mh{width:min(100%,19rem);min-height:21rem;background:var(--paper);border:6px solid var(--turq);border-bottom:0;border-radius:9.5rem 9.5rem 0 0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 1rem 1.5rem}
+.logo{display:block;max-width:11rem;max-height:9rem;width:auto;height:auto;margin-bottom:.5rem}
+.mark{display:block;font:400 6.5rem/1.1 var(--fd);color:var(--lapis)}
+.nm{font-weight:800;font-size:1.25rem;margin:0;color:var(--ink)}.tg2{font-size:.95rem;color:var(--soft);margin:.25rem 0 0}
+.wrap>.cta-row{justify-content:center;margin-top:1.75rem}.cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
+.btn{display:inline-block;padding:.75rem 2rem;border-radius:16px;background:var(--saff);color:var(--lapis);border:2px solid var(--lapis);box-shadow:0 4px 0 var(--lapis);font-family:inherit;font-weight:800;font-size:1rem;text-decoration:none;cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-3px)}.btn.ghost{background:#fff;box-shadow:none;color:var(--lapis)}.btn.ghost:hover{box-shadow:0 4px 0 var(--turq)}
+.grid{display:grid;gap:1.75rem;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));padding-block:2.5rem}
+.panel{background:var(--surface);border:2px solid var(--lapis);border-radius:70px 70px 18px 18px;padding:2.5rem 1.5rem 1.25rem;text-align:center;display:flex;flex-direction:column;box-shadow:0 6px 0 var(--turq);transition:transform .25s}
+.panel:nth-child(even){box-shadow:0 6px 0 var(--saff)}.panel:hover{transform:translateY(-4px)}
+.panel ul{list-style:none;padding:0;margin:0 0 .75rem;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center}
+.panel li a{display:flex;align-items:center;min-height:44px;padding:0 1rem;border-radius:12px;background:#e3f6f6;color:#05565a;font-weight:600;font-size:.9rem;text-decoration:none;transition:background .2s}.panel li a:hover{background:var(--saff);color:var(--lapis)}
+.act{margin:auto 0 0}
+.page{padding-block:2.5rem 4rem}
+.cards{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
+.cards>div{background:var(--surface);border:2px solid var(--lapis);border-radius:18px 18px 18px 40px;padding:1.25rem;box-shadow:0 5px 0 var(--turq);display:flex;flex-direction:column;transition:transform .2s}.cards>div:hover{transform:translateY(-3px)}
+.cards h2{font-size:1.4rem}.cards .cta-row .btn{margin-top:0}
+.rows>*{padding-block:1.25rem;border-bottom:1px solid var(--line)}.rows>*:first-child{border-top:1px solid var(--line)}
+summary{cursor:pointer;display:flex;justify-content:space-between;gap:1rem;align-items:baseline}summary .t{font-size:1.25rem;font-weight:700}
+.prose{max-width:68ch;font-size:1.125rem;line-height:1.8;padding-top:1rem}.prose[dir=rtl]{line-height:2.05}
+.links{list-style:none;padding:0;display:grid;gap:.75rem;max-width:30rem}
+.links .btn,.links .btn.ghost{display:flex;justify-content:space-between;align-items:center;min-height:3.75rem;background:#fff;color:var(--lapis);box-shadow:none;border-radius:18px 18px 18px 40px;font-size:1.1rem}
+.links .btn::after{content:'‹';font-size:1.6rem}html[dir=ltr] .links .btn::after{content:'›'}.links .btn:hover{box-shadow:0 5px 0 var(--turq)}
+footer{background:var(--surface);border-top:2px solid var(--lapis);padding-block:1.25rem}footer p{margin:0}
+.flinks{list-style:none;margin:0 0 .75rem;padding:0;display:flex;flex-wrap:wrap;gap:1.25rem}.flinks a{color:var(--lapis);font-weight:600}
+label{display:block;margin-bottom:.75rem;font-weight:600}input,textarea,select{display:block;width:100%;margin-top:.25rem;padding:.6rem;border:2px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:7rem}
+.item{border:2px solid var(--line);border-radius:14px;padding:.75rem;margin-bottom:.75rem;background:#fff}.item summary{font-weight:700}.sec{margin-block:1.5rem}.sec>h2{font-size:1.4rem}.danger{color:#9b1c1c;border-color:#9b1c1c}#msg{font-weight:700}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -72,8 +70,8 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const safe=u=>/^https?:\/\//i.test(u||'')?esc(u):'#';
 const ls={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
 const U={
-en:{notes:'Notes',translations:'Translations',projects:'Projects',about:'About',cta:'Get in touch',hz:'Hawzah studies',hzB:'Lesson notes from Islamic seminary studies, kept as a growing archive.',hzEn:'Lesson notes are published in Persian.',readFa:'Read the notes in Persian',readN:'Read the notes',tr:'Translation',trB:'Persian-to-English translation of Islamic texts, with samples and links to where each piece is published.',trC:'See translations',cd:'Code',cdB:'Small independent projects, each with its source code and a live demo.',cdC:'See projects',empty:'More coming soon.',more:'More about me',open:'Open',err:'Could not load content.json. Open the site through GitHub Pages or a local web server, not as a plain file.',nI:'Notes from Hawzah lessons, newest first.',tI:'Persian-to-English translation of Islamic texts.',pI:'Small independent projects.',rights:'All rights reserved.'},
-fa:{notes:'یادداشت‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',about:'درباره',cta:'ارتباط با من',hz:'مطالعات حوزوی',hzB:'یادداشت‌های درس‌های حوزوی، در قالب آرشیوی که کم‌کم کامل می‌شود.',hzEn:'',readFa:'',readN:'خواندن یادداشت‌ها',tr:'ترجمه',trB:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی، با نمونه و پیوند به محل انتشار هر اثر.',trC:'مشاهده‌ی ترجمه‌ها',cd:'برنامه‌نویسی',cdB:'پروژه‌های کوچک مستقل، هرکدام با کد منبع و نمونه‌ی زنده.',cdC:'مشاهده‌ی پروژه‌ها',empty:'به‌زودی بیشتر.',more:'بیشتر درباره‌ی من',open:'باز کردن',err:'فایل content.json بارگذاری نشد. سایت را از طریق GitHub Pages یا یک وب‌سرور باز کنید، نه به‌صورت فایل ساده.',nI:'یادداشت‌های درس‌های حوزوی، جدیدترین در ابتدا.',tI:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی.',pI:'پروژه‌های کوچک مستقل.',rights:'همه‌ی حقوق محفوظ است.'}};
+en:{notes:'Notes',translations:'Translations',projects:'Projects',about:'About',cta:'Get in touch',hz:'Hawzah studies',hzB:'Lesson notes from Islamic seminary studies, kept as a growing archive.',hzEn:'Lesson notes are published in Persian.',readFa:'Read the notes in Persian',readN:'Read the notes',tr:'Translation',trB:'Persian-to-English translation of Islamic texts, with samples and links to where each piece is published.',trC:'See translations',cd:'Code',cdB:'Small independent projects, each with its source code and a live demo.',cdC:'See projects',empty:'More coming soon.',more:'More about me',open:'Open',src:'Source code',err:'Could not load content.json. Open the site through GitHub Pages or a local web server, not as a plain file.',nI:'Notes from Hawzah lessons, newest first.',tI:'Persian-to-English translation of Islamic texts.',pI:'Small independent projects.',rights:'All rights reserved.'},
+fa:{notes:'یادداشت‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',about:'درباره',cta:'ارتباط با من',hz:'مطالعات حوزوی',hzB:'یادداشت‌های درس‌های حوزوی، در قالب آرشیوی که کم‌کم کامل می‌شود.',hzEn:'',readFa:'',readN:'خواندن یادداشت‌ها',tr:'ترجمه',trB:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی، با نمونه و پیوند به محل انتشار هر اثر.',trC:'مشاهده‌ی ترجمه‌ها',cd:'برنامه‌نویسی',cdB:'پروژه‌های کوچک مستقل، هرکدام با کد منبع و نمونه‌ی زنده.',cdC:'مشاهده‌ی پروژه‌ها',empty:'به‌زودی بیشتر.',more:'بیشتر درباره‌ی من',open:'باز کردن',src:'کد منبع',err:'فایل content.json بارگذاری نشد. سایت را از طریق GitHub Pages یا یک وب‌سرور باز کنید، نه به‌صورت فایل ساده.',nI:'یادداشت‌های درس‌های حوزوی، جدیدترین در ابتدا.',tI:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی.',pI:'پروژه‌های کوچک مستقل.',rights:'همه‌ی حقوق محفوظ است.'}};
 let D=null,E=null,SHA='',OPEN='',L=ls.get('lang')||((navigator.language||'').toLowerCase().startsWith('fa')?'fa':'en'),T=U[L];
 const route=()=>{const r=(location.hash||'#home').slice(1);return r==='notes'&&!NOTES?'home':r};
 const pick=o=>(o&&(o[L]||o.en||o.fa))||'';
@@ -85,18 +83,19 @@ const notesFor=()=>[...D.notes].filter(n=>L==='fa'||n.lang==='en').sort((a,b)=>S
 const page=(t,i,b)=>`<div class="page wrap"><h1>${t}</h1><p class="lede">${i}</p>${b}</div>`;
 const ext=u=>u?` target="_blank" rel="noopener"`:'';
 
+const STAR=(c,z)=>`<svg class="${c}" width="${z}" height="${z}" viewBox="0 0 200 200" fill="none" stroke="#0aa6a6" stroke-width="2" aria-hidden="true"><rect x="40" y="40" width="120" height="120"/><rect x="40" y="40" width="120" height="120" transform="rotate(45 100 100)"/><circle cx="100" cy="100" r="34"/><circle cx="100" cy="100" r="62"/></svg>`;
 const panel=(t,b,items,href,cta,note,lang)=>`<section class="panel"><h2>${t}</h2><p>${b}</p>${items.length?`<ul>${items.map(i=>`<li><a href="${i[1]}"${ext(i[2])} dir="auto">${esc(i[0])}</a></li>`).join('')}</ul>`:`<p class="muted">${note||T.empty}</p>`}<p class="act"><a class="btn ghost" href="${href}"${lang?` data-lang="${lang}"`:''}>${cta}</a></p></section>`;
 
 const pages={
 home(){const p=D.profile,c=D.links[0],n=notesFor().slice(0,3);
- return `<section class="hero"><div class="wrap"><h1 style="position:absolute;left:-9999px">${esc(nm())}</h1><img class="logo" src="logo.png" alt="${esc(p.brandFa)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mark',lang:'fa',textContent:this.alt}))"><p class="nm">${esc(nm())}</p><p class="lede">${esc(pick(p.tagline))}</p><div class="cta-row">${c?`<a class="btn" href="${safe(c.url)}"${ext(1)}>${T.cta}</a>`:''}<a class="btn ghost" href="#about">${T.more}</a></div></div></section>
+ return `<section class="hero">${STAR('st',380)}${STAR('st2',220)}<div class="wrap"><h1 style="position:absolute;left:-9999px">${esc(nm())}</h1><div class="mh"><img class="logo" src="logo.png" alt="${esc(p.brandFa)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mark',lang:'fa',textContent:this.alt}))"><p class="nm">${esc(nm())}</p><p class="tg2">${esc(pick(p.tagline))}</p></div></div></section><div class="wrap"><div class="cta-row">${c?`<a class="btn" href="${safe(c.url)}"${ext(1)}>${T.cta}</a>`:''}<a class="btn ghost" href="#about">${T.more}</a></div></div>
  <div class="wrap grid">${NOTES?panel(T.hz,T.hzB,n.map(x=>[x.title,'#notes']),'#notes',L==='en'&&!n.length?T.readFa:T.readN,L==='en'?T.hzEn:'',L==='en'&&!n.length?'fa':''):''}
  ${panel(T.tr,T.trB,D.translations.slice(0,3).map(x=>[x.title,'#translations']),'#translations',T.trC)}
- ${panel(T.cd,T.cdB,D.projects.slice(0,3).map(x=>[x.name,x.url?safe(x.url):'#projects',x.url]),'#projects',T.cdC)}</div>
+ ${panel(T.cd,T.cdB,D.projects.slice(0,3).map(x=>[x.name,(x.url||x.repo)?safe(x.url||x.repo):'#projects',x.url||x.repo]),'#projects',T.cdC)}</div>
  <div class="wrap"><p class="lede">${esc((pick(p.bio)||'').split(/\n{2,}/)[0])}</p><p><a href="#about">${T.more}</a></p></div>`},
 notes(){const n=notesFor();return page(T.notes,T.nI,n.length?`<div class="rows">${n.map(x=>`<details><summary><span class="t" dir="${dirOf(x)}">${esc(x.title)}</span><span class="muted">${fmt(x.date)}</span></summary><div class="prose" dir="${dirOf(x)}">${paras(x.body)}</div></details>`).join('')}</div>`:`<p>${L==='en'?`${T.hzEn} <a href="#notes" data-lang="fa">${T.readFa}</a>`:T.empty}</p>`)},
 translations(){return page(T.translations,T.tI,`<div class="cards">${D.translations.map(x=>`<div><h2 dir="auto">${esc(x.title)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
-projects(){return page(T.projects,T.pI,`<div class="cards">${D.projects.map(x=>`<div><h2 dir="ltr">${esc(x.name)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
+projects(){return page(T.projects,T.pI,`<div class="cards">${D.projects.map(x=>`<div><h2 dir="ltr">${esc(x.name)}</h2><p>${esc(pick(x.desc))}</p><div class="cta-row" style="margin-top:auto">${x.url?`<a class="btn" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}${x.repo?`<a class="btn ghost" href="${safe(x.repo)}"${ext(1)}>${T.src}</a>`:''}</div></div>`).join('')}</div>`)},
 about(){const p=D.profile;return page(esc(nm()),esc(pick(p.tagline)),`<div class="prose" dir="${L==='fa'?'rtl':'ltr'}">${paras(pick(p.bio))}</div><ul class="links">${D.links.map((l,i)=>`<li><a class="btn${i?' ghost':''}" href="${safe(l.url)}"${ext(1)}>${esc(l.label)}</a></li>`).join('')}</ul>`)}};
 
 function chrome(){const r=route();
@@ -118,7 +117,7 @@ const SCHEMA=[
 ['links','لینک‌ها','label',[['label','عنوان'],['url','آدرس (با https)']]],
 ['notes','یادداشت‌ها','title',[['title','عنوان'],['date','تاریخ','date'],['lang','زبان متن','sel'],['body','متن (بین پاراگراف‌ها یک خط خالی)','area']]],
 ['translations','ترجمه‌ها','title',[['title','عنوان'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','پیوند انتشار']]],
-['projects','پروژه‌ها','name',[['name','نام'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس']]]].filter(s=>NOTES||s[0]!=='notes');
+['projects','پروژه‌ها','name',[['name','نام'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس دمو / سایت'],['repo','آدرس گیت‌هاب']]]].filter(s=>NOTES||s[0]!=='notes');
 const get=(o,p)=>p.split('.').reduce((a,k)=>a?.[k],o);
 const set=(o,p,v)=>{const k=p.split('.'),l=k.pop();k.reduce((a,x)=>a[x]??={},o)[l]=v};
 const api=()=>`https://api.github.com/repos/${D.repo}/contents/content.json`;
@@ -148,7 +147,7 @@ function draw(){
   else if(b.dataset.del){const[k,i]=b.dataset.del.split('.');if(confirm('حذف شود؟')){E[k].splice(+i,1);OPEN='';draw()}}
   else if(b.id==='out'){ls.del('token');location.hash='#home'}
   else if(b.id==='save'){
-   const bad=['links','translations','projects'].flatMap(k=>(E[k]||[]).map(x=>x.url)).find(u=>u&&!/^https?:\/\//i.test(u));
+   const bad=['links','translations','projects'].flatMap(k=>(E[k]||[]).flatMap(x=>[x.url,x.repo])).find(u=>u&&!/^https?:\/\//i.test(u));
    if(bad)return msg('همه‌ی آدرس‌ها باید با http:// یا https:// شروع شوند: '+bad,1);
    if(E.links.some(l=>!l.url))return msg('هر لینک باید آدرس داشته باشد',1);
    b.disabled=true;msg('در حال ذخیره…');
