@@ -52,12 +52,21 @@
   ],
   "projects": [
     {
+      "name": "آسمانک",
+      "desc": {
+        "fa": "یک گنبد آسمان تعاملی، با قابلیت نشان داد مسیر حرکت خورشید در فصل های مختلف، در شهرهای مختلف",
+        "en": "An interactive sky dome, to show the path for the movement of the sun in different seasons, in various cities."
+      },
+      "url": "https://mhsb.github.io/asemanak/",
+      "repo": "https://github.com/mhsb/asemanak"
+    },
+    {
       "name": "sunclock",
       "desc": {
         "en": "A sunset-to-sunset clock for traditions that begin the day at sunset. It shows the time since (or until) sunset under a sky that follows the real sun, with prayer times and the Hijri date. Everything is calculated on your device, so it works offline, and it can be installed as an app.",
         "fa": "ساعتی از غروب تا غروب، برای کسانی که روز را از غروب آغاز می‌کنند. مدت زمان گذشته از غروب (یا باقی‌مانده تا آن) را زیر آسمانی نشان می‌دهد که از موقعیت واقعی خورشید پیروی می‌کند؛ همراه با اوقات شرعی و تاریخ قمری. همه‌چیز روی خود دستگاه محاسبه می‌شود، پس بدون اینترنت هم کار می‌کند و می‌شود آن را به‌صورت برنامه نصب کرد."
       },
-      "url": "",
+      "url": "https://mhsb.github.io/sunclock/",
       "repo": "https://github.com/mhsb/sunclock"
     },
     {
@@ -75,7 +84,7 @@
         "en": "A small atlas for children that also works offline, with pages for the world, for Iran, and for countries.",
         "fa": "یک اطلس کوچک برای کودکان، با قابلیت کار آفلاین؛ شامل صفحه‌هایی برای اطلس جهان، اطلس ایران و کشورها."
       },
-      "url": "",
+      "url": "https://mhsb.github.io/atlasak",
       "repo": "https://github.com/mhsb/atlasak"
     },
     {
@@ -84,7 +93,7 @@
         "en": "A 3D solar system for children, made so they can see how the seasons move.",
         "fa": "یک منظومه‌ی شمسی سه‌بعدی برای کودکان، تا بتوانند حرکت فصل‌ها را ببینند."
       },
-      "url": "",
+      "url": "https://mhsb.github.io/manzumak",
       "repo": "https://github.com/mhsb/manzumak"
     }
   ]
