@@ -52,7 +52,7 @@
   ],
   "projects": [
     {
-      "name": "آسمانک",
+      "name": "asemanak",
       "desc": {
         "fa": "یک گنبد آسمان تعاملی، با قابلیت نشان داد مسیر حرکت خورشید در فصل های مختلف، در شهرهای مختلف",
         "en": "An interactive sky dome, to show the path for the movement of the sun in different seasons, in various cities."
