@@ -52,9 +52,9 @@
   ],
   "projects": [
     {
-      "name": "جامـ جمــ ـع و جور",
+      "name": "JameJamoJur",
       "desc": {
-        "fa": "ترکیب سه پروژه: اطلسک، منظومک و آسمانک. در یک برنامه هم یک نقشه کامل کره زمین داری با کارتهای معرفی کشورها، هم یک نقشه دقیق ایران، هم یک منظومه شمسی سه بعدی، و هم یک گنبد آسمان که مسیر حرکت خورشید در فصول مختلف رو به تو نشون میده. ",
+        "fa": "جامـ جمــ ـع و جور\nترکیب سه پروژه: اطلسک، منظومک و آسمانک. در یک برنامه هم یک نقشه کامل کره زمین داری با کارتهای معرفی کشورها، هم یک نقشه دقیق ایران، هم یک منظومه شمسی سه بعدی، و هم یک گنبد آسمان که مسیر حرکت خورشید در فصول مختلف رو به تو نشون میده. ",
         "en": "Combining three projects: Atlasak, Manzoumak, and Asemanak. In a single app, you have a complete map of the globe with country introduction cards, a detailed map of Iran, a 3D solar system, and a sky dome that shows you the Sun’s path across different seasons."
       },
       "url": "https://mhsb.github.io/jamejamojur",
