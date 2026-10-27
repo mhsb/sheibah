@@ -52,6 +52,15 @@
   ],
   "projects": [
     {
+      "name": "جامـ جمــ ـع و جور",
+      "desc": {
+        "fa": "ترکیب سه پروژه: اطلسک، منظومک و آسمانک. در یک برنامه هم یک نقشه کامل کره زمین داری با کارتهای معرفی کشورها، هم یک نقشه دقیق ایران، هم یک منظومه شمسی سه بعدی، و هم یک گنبد آسمان که مسیر حرکت خورشید در فصول مختلف رو به تو نشون میده. ",
+        "en": "Combining three projects: Atlasak, Manzoumak, and Asemanak. In a single app, you have a complete map of the globe with country introduction cards, a detailed map of Iran, a 3D solar system, and a sky dome that shows you the Sun’s path across different seasons."
+      },
+      "url": "https://mhsb.github.io/jamejamojur",
+      "repo": "https://github.com/mhsb/jamejamojur"
+    },
+    {
       "name": "asemanak",
       "desc": {
         "fa": "یک گنبد آسمان تعاملی، با قابلیت نشان داد مسیر حرکت خورشید در فصل های مختلف، در شهرهای مختلف",
@@ -70,12 +79,12 @@
       "repo": "https://github.com/mhsb/sunclock"
     },
     {
-      "name": "inarobegir",
+      "name": "inarobeg.ir",
       "desc": {
-        "en": "ModernSL: a new way to make shopping lists. A lightweight web app that opens in the browser and can be installed on your phone.",
-        "fa": "ModernSL: شیوه‌ای تازه برای ساختن فهرست خرید. یک وب‌اپ سبک که در مرورگر باز می‌شود و می‌شود آن را روی گوشی نصب کرد."
+        "en": "A new way to make shopping lists. A lightweight web app that opens in the browser and can be installed on your phone. You can create items, write the price, check price history, choose number or amounts. But, the second you just start typing and everything is there: the name, the price... and you're just a tap away from a done job.",
+        "fa": "شیوه‌ای تازه برای ساختن فهرست خرید. یک وب‌اپ سبک که در مرورگر باز می‌شود و می‌شود آن را روی گوشی نصب کرد. اسم و قیمت رو وارد میکنی و تعداد رو میزنی. دفعه بعد، فقط شروع به تایپ اسم میکنی و با یک تپ اسم میره توی لیست. تاریخچه قیمت ها رو میبینی و گزارش خریدهای قبلیت رو. "
       },
-      "url": "https://mhsb.github.io/inarobegir/",
+      "url": "https://inarobeg.ir",
       "repo": "https://github.com/mhsb/inarobegir"
     },
     {
