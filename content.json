@@ -41,11 +41,12 @@
     }
   ],
   "translations": [
+    {},
     {
-      "title": "Sample translation",
+      "title": "به زودی/Coming soon ",
       "desc": {
-        "en": "Placeholder entry.",
-        "fa": "نمونه‌ی موقت."
+        "en": "Soon I'll showcase some of my translations from Persian to English here.",
+        "fa": "به زودی بعضی از ترجمه های فارسی به انگلیسی خودم رو اینجا قرار میدم."
       },
       "url": "https://example.com"
     }
