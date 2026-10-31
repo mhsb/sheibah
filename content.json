@@ -52,6 +52,15 @@
   ],
   "projects": [
     {
+      "name": "Compeng",
+      "desc": {
+        "en": "A simple gamified English course for children to learn simple computer terminology offline.",
+        "fa": "یک دوره ساده و بازی محور زبان انگلیسی با هدف آموزش زبان در حد کار ساده با کامپیوتر به کودکان، بدون نیاز به اینترنت"
+      },
+      "repo": "https://github.com/mhsb/compeng",
+      "url": "https://mhsb.github.io/compeng/"
+    },
+    {
       "name": "JameJamoJur",
       "desc": {
         "fa": "جامـ جمــ ـع و جور\nترکیب سه پروژه: اطلسک، منظومک و آسمانک. در یک برنامه هم یک نقشه کامل کره زمین داری با کارتهای معرفی کشورها، هم یک نقشه دقیق ایران، هم یک منظومه شمسی سه بعدی، و هم یک گنبد آسمان که مسیر حرکت خورشید در فصول مختلف رو به تو نشون میده. ",
