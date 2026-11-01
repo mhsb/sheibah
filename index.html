@@ -43,7 +43,9 @@ nav a{display:block;padding:.7rem 0;color:#cfe0ff;text-decoration:none;font-weig
 .page{padding-block:2.5rem 4rem}
 .cards{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(18rem,1fr))}
 .cards>div{background:var(--surface);border:2px solid var(--lapis);border-radius:18px 18px 18px 40px;padding:1.25rem;box-shadow:0 5px 0 var(--turq);display:flex;flex-direction:column;transition:transform .2s}.cards>div:hover{transform:translateY(-3px)}
+.cards>div.feat{box-shadow:0 5px 0 var(--saff)}
 .cards h2{font-size:1.4rem}.cards .cta-row .btn{margin-top:0}
+.badge{align-self:flex-start;background:var(--saff);color:var(--lapis);font-weight:800;font-size:.8rem;line-height:1.7;padding:0 .75rem;border-radius:99px;margin-bottom:.5rem}
 .rows>*{padding-block:1.25rem;border-bottom:1px solid var(--line)}.rows>*:first-child{border-top:1px solid var(--line)}
 summary{cursor:pointer;display:flex;justify-content:space-between;gap:1rem;align-items:baseline}summary .t{font-size:1.25rem;font-weight:700}
 .prose{max-width:68ch;font-size:1.125rem;line-height:1.8;padding-top:1rem}.prose[dir=rtl]{line-height:2.05}
@@ -53,6 +55,7 @@ summary{cursor:pointer;display:flex;justify-content:space-between;gap:1rem;align
 footer{background:var(--surface);border-top:2px solid var(--lapis);padding-block:1.25rem}footer p{margin:0}
 .flinks{list-style:none;margin:0 0 .75rem;padding:0;display:flex;flex-wrap:wrap;gap:1.25rem}.flinks a{color:var(--lapis);font-weight:600}
 label{display:block;margin-bottom:.75rem;font-weight:600}input,textarea,select{display:block;width:100%;margin-top:.25rem;padding:.6rem;border:2px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}textarea{min-height:7rem}
+label.chk{display:flex;align-items:center;gap:.6rem;cursor:pointer}label.chk input{display:inline-block;width:1.4rem;height:1.4rem;margin:0;padding:0;accent-color:var(--lapis)}
 .item{border:2px solid var(--line);border-radius:14px;padding:.75rem;margin-bottom:.75rem;background:#fff}.item summary{font-weight:700}.sec{margin-block:1.5rem}.sec>h2{font-size:1.4rem}.danger{color:#9b1c1c;border-color:#9b1c1c}#msg{font-weight:700}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -65,21 +68,26 @@ label{display:block;margin-bottom:.75rem;font-weight:600}input,textarea,select{d
 <noscript><p class="wrap">JavaScript is required to view this site.</p></noscript>
 <script>
 const NOTES=false; /* set to true to bring the lesson-notes section back */
+const HOME_MAX=6;  /* max featured projects shown on the home page */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const safe=u=>/^https?:\/\//i.test(u||'')?esc(u):'#';
 const ls={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
 const U={
-en:{notes:'Notes',translations:'Translations',projects:'Projects',about:'About',cta:'Get in touch',hz:'Hawzah studies',hzB:'Lesson notes from Islamic seminary studies, kept as a growing archive.',hzEn:'Lesson notes are published in Persian.',readFa:'Read the notes in Persian',readN:'Read the notes',tr:'Translation',trB:'Persian-to-English translation of Islamic texts, with samples and links to where each piece is published.',trC:'See translations',cd:'Code',cdB:'Small independent projects, each with its source code and a live demo.',cdC:'See projects',empty:'More coming soon.',more:'More about me',open:'Open',src:'Source code',err:'Could not load content.json. Open the site through GitHub Pages or a local web server, not as a plain file.',nI:'Notes from Hawzah lessons, newest first.',tI:'Persian-to-English translation of Islamic texts.',pI:'Small independent projects.',rights:'All rights reserved.'},
-fa:{notes:'یادداشت‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',about:'درباره',cta:'ارتباط با من',hz:'مطالعات حوزوی',hzB:'یادداشت‌های درس‌های حوزوی، در قالب آرشیوی که کم‌کم کامل می‌شود.',hzEn:'',readFa:'',readN:'خواندن یادداشت‌ها',tr:'ترجمه',trB:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی، با نمونه و پیوند به محل انتشار هر اثر.',trC:'مشاهده‌ی ترجمه‌ها',cd:'برنامه‌نویسی',cdB:'پروژه‌های کوچک مستقل، هرکدام با کد منبع و نمونه‌ی زنده.',cdC:'مشاهده‌ی پروژه‌ها',empty:'به‌زودی بیشتر.',more:'بیشتر درباره‌ی من',open:'باز کردن',src:'کد منبع',err:'فایل content.json بارگذاری نشد. سایت را از طریق GitHub Pages یا یک وب‌سرور باز کنید، نه به‌صورت فایل ساده.',nI:'یادداشت‌های درس‌های حوزوی، جدیدترین در ابتدا.',tI:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی.',pI:'پروژه‌های کوچک مستقل.',rights:'همه‌ی حقوق محفوظ است.'}};
+en:{notes:'Notes',translations:'Translations',projects:'Projects',about:'About',cta:'Get in touch',hz:'Hawzah studies',hzB:'Lesson notes from Islamic seminary studies, kept as a growing archive.',hzEn:'Lesson notes are published in Persian.',readFa:'Read the notes in Persian',readN:'Read the notes',tr:'Translation',trB:'Persian-to-English translation of Islamic texts, with samples and links to where each piece is published.',trC:'See translations',cd:'Code',cdB:'Small independent projects, each with its source code and a live demo.',cdC:'See projects',empty:'More coming soon.',more:'More about me',open:'Open',src:'Source code',feat:'Featured',err:'Could not load content.json. Open the site through GitHub Pages or a local web server, not as a plain file.',nI:'Notes from Hawzah lessons, newest first.',tI:'Persian-to-English translation of Islamic texts.',pI:'Small independent projects.',rights:'All rights reserved.'},
+fa:{notes:'یادداشت‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',about:'درباره',cta:'ارتباط با من',hz:'مطالعات حوزوی',hzB:'یادداشت‌های درس‌های حوزوی، در قالب آرشیوی که کم‌کم کامل می‌شود.',hzEn:'',readFa:'',readN:'خواندن یادداشت‌ها',tr:'ترجمه',trB:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی، با نمونه و پیوند به محل انتشار هر اثر.',trC:'مشاهده‌ی ترجمه‌ها',cd:'برنامه‌نویسی',cdB:'پروژه‌های کوچک مستقل، هرکدام با کد منبع و نمونه‌ی زنده.',cdC:'مشاهده‌ی پروژه‌ها',empty:'به‌زودی بیشتر.',more:'بیشتر درباره‌ی من',open:'باز کردن',src:'کد منبع',feat:'ویژه',err:'فایل content.json بارگذاری نشد. سایت را از طریق GitHub Pages یا یک وب‌سرور باز کنید، نه به‌صورت فایل ساده.',nI:'یادداشت‌های درس‌های حوزوی، جدیدترین در ابتدا.',tI:'ترجمه‌ی متون اسلامی از فارسی به انگلیسی.',pI:'پروژه‌های کوچک مستقل.',rights:'همه‌ی حقوق محفوظ است.'}};
 let D=null,E=null,SHA='',OPEN='',L=ls.get('lang')||((navigator.language||'').toLowerCase().startsWith('fa')?'fa':'en'),T=U[L];
 const route=()=>{const r=(location.hash||'#home').slice(1);return r==='notes'&&!NOTES?'home':r};
-const pick=o=>(o&&(o[L]||o.en||o.fa))||'';
+/* pick: works for {en,fa} objects and for legacy plain strings; falls back to the other language */
+const pick=o=>typeof o==='string'?o:(o&&(o[L]||o.en||o.fa))||'';
 const nm=()=>L==='fa'?D.profile.nameFa:D.profile.nameEn;
 const fmt=d=>{try{return new Intl.DateTimeFormat(L==='fa'?'fa-IR-u-ca-persian':'en-GB',{dateStyle:'long',timeZone:'UTC'}).format(new Date(d))}catch{return d||''}};
 const paras=t=>esc(t).split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
 const dirOf=n=>n.lang==='en'?'ltr':'rtl';
 const notesFor=()=>[...D.notes].filter(n=>L==='fa'||n.lang==='en').sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+/* featured projects first (stable sort keeps the original order inside each group) */
+const sortProjects=arr=>[...(arr||[])].sort((a,b)=>(b.featured?1:0)-(a.featured?1:0));
+const homeProjects=()=>{const s=sortProjects(D.projects),f=s.filter(p=>p.featured);return f.length?f.slice(0,HOME_MAX):s.slice(0,3)};
 const page=(t,i,b)=>`<div class="page wrap"><h1>${t}</h1><p class="lede">${i}</p>${b}</div>`;
 const ext=u=>u?` target="_blank" rel="noopener"`:'';
 
@@ -91,11 +99,11 @@ home(){const p=D.profile,c=D.links[0],n=notesFor().slice(0,3);
  return `<section class="hero">${STAR('st',380)}${STAR('st2',220)}<div class="wrap"><h1 style="position:absolute;left:-9999px">${esc(nm())}</h1><div class="mh"><img class="logo" src="logo.png" alt="${esc(p.brandFa)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mark',lang:'fa',textContent:this.alt}))"><p class="nm">${esc(nm())}</p><p class="tg2">${esc(pick(p.tagline))}</p></div></div></section><div class="wrap"><div class="cta-row">${c?`<a class="btn" href="${safe(c.url)}"${ext(1)}>${T.cta}</a>`:''}<a class="btn ghost" href="#about">${T.more}</a></div></div>
  <div class="wrap grid">${NOTES?panel(T.hz,T.hzB,n.map(x=>[x.title,'#notes']),'#notes',L==='en'&&!n.length?T.readFa:T.readN,L==='en'?T.hzEn:'',L==='en'&&!n.length?'fa':''):''}
  ${panel(T.tr,T.trB,D.translations.slice(0,3).map(x=>[x.title,'#translations']),'#translations',T.trC)}
- ${panel(T.cd,T.cdB,D.projects.slice(0,3).map(x=>[x.name,(x.url||x.repo)?safe(x.url||x.repo):'#projects',x.url||x.repo]),'#projects',T.cdC)}</div>
+ ${panel(T.cd,T.cdB,homeProjects().map(x=>[pick(x.name),(x.url||x.repo)?safe(x.url||x.repo):'#projects',x.url||x.repo]),'#projects',T.cdC)}</div>
  <div class="wrap"><p class="lede">${esc((pick(p.bio)||'').split(/\n{2,}/)[0])}</p><p><a href="#about">${T.more}</a></p></div>`},
 notes(){const n=notesFor();return page(T.notes,T.nI,n.length?`<div class="rows">${n.map(x=>`<details><summary><span class="t" dir="${dirOf(x)}">${esc(x.title)}</span><span class="muted">${fmt(x.date)}</span></summary><div class="prose" dir="${dirOf(x)}">${paras(x.body)}</div></details>`).join('')}</div>`:`<p>${L==='en'?`${T.hzEn} <a href="#notes" data-lang="fa">${T.readFa}</a>`:T.empty}</p>`)},
 translations(){return page(T.translations,T.tI,`<div class="cards">${D.translations.map(x=>`<div><h2 dir="auto">${esc(x.title)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
-projects(){return page(T.projects,T.pI,`<div class="cards">${D.projects.map(x=>`<div><h2 dir="ltr">${esc(x.name)}</h2><p>${esc(pick(x.desc))}</p><div class="cta-row" style="margin-top:auto">${x.url?`<a class="btn" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}${x.repo?`<a class="btn ghost" href="${safe(x.repo)}"${ext(1)}>${T.src}</a>`:''}</div></div>`).join('')}</div>`)},
+projects(){return page(T.projects,T.pI,`<div class="cards">${sortProjects(D.projects).map(x=>`<div${x.featured?' class="feat"':''}>${x.featured?`<span class="badge">★ ${T.feat}</span>`:''}<h2 dir="auto">${esc(pick(x.name))}</h2><p>${esc(pick(x.desc))}</p><div class="cta-row" style="margin-top:auto">${x.url?`<a class="btn" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}${x.repo?`<a class="btn ghost" href="${safe(x.repo)}"${ext(1)}>${T.src}</a>`:''}</div></div>`).join('')}</div>`)},
 about(){const p=D.profile;return page(esc(nm()),esc(pick(p.tagline)),`<div class="prose" dir="${L==='fa'?'rtl':'ltr'}">${paras(pick(p.bio))}</div><ul class="links">${D.links.map((l,i)=>`<li><a class="btn${i?' ghost':''}" href="${safe(l.url)}"${ext(1)}>${esc(l.label)}</a></li>`).join('')}</ul>`)}};
 
 function chrome(){const r=route();
@@ -117,13 +125,13 @@ const SCHEMA=[
 ['links','لینک‌ها','label',[['label','عنوان'],['url','آدرس (با https)']]],
 ['notes','یادداشت‌ها','title',[['title','عنوان'],['date','تاریخ','date'],['lang','زبان متن','sel'],['body','متن (بین پاراگراف‌ها یک خط خالی)','area']]],
 ['translations','ترجمه‌ها','title',[['title','عنوان'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','پیوند انتشار']]],
-['projects','پروژه‌ها','name',[['name','نام'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس دمو / سایت'],['repo','آدرس گیت‌هاب']]]].filter(s=>NOTES||s[0]!=='notes');
+['projects','پروژه‌ها','name.fa',[['name.fa','نام (فارسی)'],['name.en','نام (انگلیسی)'],['featured','پروژه‌ی ویژه (بالای فهرست و در صفحه‌ی اصلی)','chk'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس دمو / سایت'],['repo','آدرس گیت‌هاب']]]].filter(s=>NOTES||s[0]!=='notes');
 const get=(o,p)=>p.split('.').reduce((a,k)=>a?.[k],o);
-const set=(o,p,v)=>{const k=p.split('.'),l=k.pop();k.reduce((a,x)=>a[x]??={},o)[l]=v};
+const set=(o,p,v)=>{const k=p.split('.'),l=k.pop();let c=o;for(const x of k){if(typeof c[x]!=='object'||c[x]===null)c[x]={};c=c[x]}c[l]=v};
 const api=()=>`https://api.github.com/repos/${D.repo}/contents/content.json`;
 async function gh(method,body){const r=await fetch(api()+(method==='GET'?`?ref=${D.branch||'main'}`:''),{method,headers:{Authorization:'Bearer '+ls.get('token'),Accept:'application/vnd.github+json'},body:body&&JSON.stringify(body)});
  if(!r.ok)throw new Error([401,403,404].includes(r.status)?`دسترسی نیست؛ توکن یا مقدار repo در content.json را بررسی کنید (${r.status})`:r.status===409||r.status===422?'تداخل نسخه؛ صفحه را دوباره باز کنید':`خطا (${r.status})`);return r.json()}
-const msg=(t,bad)=>{const m=$('#msg');if(m){m.textContent=t;m.style.color=bad?'#9b1c1c':'var(--accent)'}};
+const msg=(t,bad)=>{const m=$('#msg');if(m){m.textContent=t;m.style.color=bad?'#9b1c1c':'var(--turq-d)'}};
 const shell=b=>{$('#main').innerHTML=`<div class="page wrap" dir="rtl" lang="fa" style="font-family:var(--ff)"><h1>ادمین</h1>${b}</div>`};
 
 async function admin(){
@@ -131,25 +139,35 @@ async function admin(){
  if(!ls.get('token')){shell(`<p>توکن گیت‌هاب (fine-grained، فقط همین ریپو، دسترسی Contents: Read and write) را وارد کنید. فقط در همین مرورگر ذخیره می‌شود.</p><label>توکن<input id="tk" type="password" dir="ltr" autocomplete="off"></label><button class="btn" id="go">ورود</button>`);
   $('#go').onclick=()=>{const v=$('#tk').value.trim();if(v){ls.set('token',v);admin()}};return}
  shell('<p>در حال بارگذاری…</p>');
- try{const r=await gh('GET');SHA=r.sha;E=JSON.parse(decodeURIComponent(escape(atob(r.content.replace(/\s/g,'')))));draw()}
+ try{const r=await gh('GET');SHA=r.sha;E=JSON.parse(decodeURIComponent(escape(atob(r.content.replace(/\s/g,'')))));
+  /* migrate legacy single-string project names into {en, fa} */
+  (E.projects||[]).forEach(p=>{if(typeof p.name==='string')p.name={en:p.name,fa:''}});
+  draw()}
  catch(e){shell(`<p id="msg" style="color:#9b1c1c">${esc(e.message)}</p><button class="btn ghost" id="out">خروج و تغییر توکن</button>`);$('#out').onclick=()=>{ls.del('token');admin()}}}
 
 function draw(){
- const sec=([k,t,tk,f])=>{const fld=(base,[p,l,kind],o)=>{const v=get(o,p)??'',key=base+'.'+p;
-   return `<label>${l}${kind==='area'?`<textarea data-k="${key}" dir="auto">${esc(v)}</textarea>`:kind==='sel'?`<select data-k="${key}"><option value="fa"${v!=='en'?' selected':''}>فارسی</option><option value="en"${v==='en'?' selected':''}>English</option></select>`:`<input data-k="${key}" ${kind==='date'?'type="date"':''} dir="auto" value="${esc(v)}">`}</label>`};
+ const sec=([k,t,tk,f])=>{
+  const ttl=it=>{const v=get(it,tk);if(v)return v;const n=it.name;return typeof n==='string'?n:(n&&(n.fa||n.en))||''};
+  const fld=(base,[p,l,kind],o)=>{
+   const v=get(o,p)??'',key=base+'.'+p;
+   if(kind==='chk')return `<label class="chk"><input type="checkbox" data-k="${key}"${v===true?' checked':''}><span>${l}</span></label>`;
+   return `<label>${l}${kind==='area'?`<textarea data-k="${key}" dir="auto">${esc(v)}</textarea>`:kind==='sel'?`<select data-k="${key}"><option value="fa"${v!=='en'?' selected':''}>فارسی</option><option value="en"${v==='en'?' selected':''}>English</option></select>`:`<input data-k="${key}" ${kind==='date'?'type="date"':''} dir="auto" value="${esc(v)}">`}</label>`;
+  };
   if(!tk)return `<div class="sec"><h2>${t}</h2>${f.map(x=>fld(k,x,E)).join('')}</div>`;
-  return `<div class="sec"><h2>${t}</h2>${(E[k]||[]).map((it,i)=>`<details class="item"${OPEN===k+'.'+i?' open':''}><summary>${esc(it[tk]||'(بدون عنوان)')}</summary>${f.map(x=>fld(k+'.'+i,x,it)).join('')}<button class="btn ghost danger" data-del="${k}.${i}">حذف</button></details>`).join('')}<button class="btn ghost" data-add="${k}">+ افزودن</button></div>`};
+  return `<div class="sec"><h2>${t}</h2>${(E[k]||[]).map((it,i)=>`<details class="item"${OPEN===k+'.'+i?' open':''}><summary>${it.featured?'★ ':''}${esc(ttl(it)||'(بدون عنوان)')}</summary>${f.map(x=>fld(k+'.'+i,x,it)).join('')}<button class="btn ghost danger" data-del="${k}.${i}">حذف</button></details>`).join('')}<button class="btn ghost" data-add="${k}">+ افزودن</button></div>`;
+ };
  shell(`${SCHEMA.map(sec).join('')}<p><button class="btn" id="save">ذخیره و انتشار</button> <button class="btn ghost" id="out">خروج</button></p><p id="msg" role="status"></p><p class="muted">بعد از ذخیره، حدود یک دقیقه طول می‌کشد تا سایت به‌روز شود.</p>`);
  const m=$('#main');
- m.oninput=e=>{const k=e.target.dataset.k;if(k)set(E,k,e.target.value)};
+ m.oninput=e=>{const k=e.target.dataset.k;if(!k)return;set(E,k,e.target.type==='checkbox'?e.target.checked:e.target.value)};
  m.onclick=async e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.dataset.add){const k=b.dataset.add;(E[k]=E[k]||[]).unshift(k==='notes'?{date:new Date().toISOString().slice(0,10),lang:'fa'}:{});OPEN=k+'.0';draw()}
+  if(b.dataset.add){const k=b.dataset.add;const def=k==='notes'?{date:new Date().toISOString().slice(0,10),lang:'fa'}:k==='projects'?{name:{en:'',fa:''},featured:false}:{};(E[k]=E[k]||[]).unshift(def);OPEN=k+'.0';draw()}
   else if(b.dataset.del){const[k,i]=b.dataset.del.split('.');if(confirm('حذف شود؟')){E[k].splice(+i,1);OPEN='';draw()}}
   else if(b.id==='out'){ls.del('token');location.hash='#home'}
   else if(b.id==='save'){
    const bad=['links','translations','projects'].flatMap(k=>(E[k]||[]).flatMap(x=>[x.url,x.repo])).find(u=>u&&!/^https?:\/\//i.test(u));
    if(bad)return msg('همه‌ی آدرس‌ها باید با http:// یا https:// شروع شوند: '+bad,1);
    if(E.links.some(l=>!l.url))return msg('هر لینک باید آدرس داشته باشد',1);
+   if((E.projects||[]).some(p=>!pick(p.name).trim()))return msg('هر پروژه باید حداقل یک نام (فارسی یا انگلیسی) داشته باشد',1);
    b.disabled=true;msg('در حال ذخیره…');
    try{const r=await gh('PUT',{message:'Update content via admin',branch:D.branch||'main',sha:SHA,content:btoa(unescape(encodeURIComponent(JSON.stringify(E,null,2)+'\n')))});SHA=r.content.sha;D=JSON.parse(JSON.stringify(E));msg('ذخیره شد ✓ تا حدود یک دقیقه دیگر روی سایت دیده می‌شود.')}
    catch(err){msg(err.message,1)}b.disabled=false}};
