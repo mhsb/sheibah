@@ -61,7 +61,8 @@
         "fa": "کامپنگ، کامپیوتر و انگلیسی:یک دوره ساده و بازی محور زبان انگلیسی با هدف آموزش زبان در حد کار ساده با کامپیوتر به کودکان، بدون نیاز به اینترنت"
       },
       "repo": "https://github.com/mhsb/compeng",
-      "url": "https://mhsb.github.io/compeng/"
+      "url": "https://mhsb.github.io/compeng/",
+      "featured": true
     },
     {
       "name": {
