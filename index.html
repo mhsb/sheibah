@@ -148,14 +148,59 @@ const set=(o,p,v)=>{const k=p.split('.'),l=k.pop();let c=o;for(const x of k){if(
 const api=()=>`https://api.github.com/repos/${D.repo}/contents/content.json`;
 async function gh(method,body){const r=await fetch(api()+(method==='GET'?`?ref=${D.branch||'main'}`:''),{method,headers:{Authorization:'Bearer '+ls.get('token'),Accept:'application/vnd.github+json'},body:body&&JSON.stringify(body)});
  if(!r.ok)throw new Error([401,403,404].includes(r.status)?`دسترسی نیست؛ توکن یا مقدار repo در content.json را بررسی کنید (${r.status})`:r.status===409||r.status===422?'تداخل نسخه؛ صفحه را دوباره باز کنید':`خطا (${r.status})`);return r.json()}
+const TRIED=new Set();
+async function loadBmp(b){try{return await createImageBitmap(b)}catch{}
+ try{const i=new Image();i.src=URL.createObjectURL(b);await i.decode();return i}catch{throw new Error('این فرمت تصویر پشتیبانی نمی‌شود (PNG، JPG، WebP یا SVG)')}}
+async function findIcon(pageUrl){
+ const abs=(u,b)=>{try{return new URL(u,b).href}catch{return null}};
+ const sz=a=>Math.max(0,...String(a||'').split(/\s+/).map(x=>parseInt(x)||0));
+ const r=await fetch(pageUrl);if(!r.ok)throw new Error('صفحه‌ی پروژه باز نشد ('+r.status+')');
+ const base=r.url||pageUrl,doc=new DOMParser().parseFromString(await r.text(),'text/html'),c=[];
+ const man=doc.querySelector('link[rel~=manifest]');
+ if(man){try{const mu=abs(man.getAttribute('href'),base),m=await(await fetch(mu)).json();(m.icons||[]).forEach(i=>c.push([sz(i.sizes)-(/maskable/.test(i.purpose||'')&&!/any/.test(i.purpose||'')?1000:0),abs(i.src,mu)]))}catch{}}
+ doc.querySelectorAll('link[rel~=apple-touch-icon]').forEach(l=>c.push([sz(l.getAttribute('sizes'))||180,abs(l.getAttribute('href'),base)]));
+ doc.querySelectorAll('link[rel~=icon]').forEach(l=>c.push([sz(l.getAttribute('sizes'))||16,abs(l.getAttribute('href'),base)]));
+ c.push([1,abs('favicon.ico',base)]);
+ return c.filter(x=>x[1]).sort((a,b)=>b[0]-a[0]).map(x=>x[1])}
+async function iconFor(url){
+ const urls=await findIcon(url);
+ for(const u of urls){try{const r=await fetch(u);if(!r.ok)continue;const b=await r.blob();if(b.size<50)continue;return await upImg(b)}catch{}}
+ throw new Error('آیکونی در این لینک پیدا نشد؛ می‌توانی دستی آپلود کنی')}
 async function upImg(file){
- const bm=await createImageBitmap(file).catch(()=>{throw new Error('این فرمت تصویر پشتیبانی نمی‌شود (PNG، JPG یا WebP)')});
+ const bm=await loadBmp(file);
  const z=Math.min(1,512/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bm.width*z));c.height=Math.max(1,Math.round(bm.height*z));
  c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
  let u=c.toDataURL('image/webp',.85),x='webp';if(!u.startsWith('data:image/webp')){u=c.toDataURL('image/png');x='png'}
  const path=`img/p-${Date.now()}.${x}`;
  const r=await fetch(`https://api.github.com/repos/${D.repo}/contents/${path}`,{method:'PUT',headers:{Authorization:'Bearer '+ls.get('token'),Accept:'application/vnd.github+json'},body:JSON.stringify({message:'Add project image',branch:D.branch||'main',content:u.split(',')[1]})});
  if(!r.ok)throw new Error('آپلود تصویر ناموفق بود ('+r.status+')');return path}
+const PROMPT=`تو دستیار تنظیم محتوای یک سایت شخصی دوزبانه (فارسی/انگلیسی) هستی. بر اساس «اطلاعات من» که در پایان این پیام می‌آید، فقط یک JSON معتبر تولید کن.
+
+قواعد خروجی:
+- فقط خود JSON؛ بدون توضیح، بدون بک‌تیک و بدون کامنت.
+- فقط این کلیدهای سطح اول مجازند: profile، links، translations، projects. بخشی را که تغییر نمی‌دهم نیاور. کلید notes را هرگز نیاور.
+- هر متن دوزبانه باید هم فارسی و هم انگلیسی باشد؛ ترجمه را طبیعی و روان بنویس، نه تحت‌اللفظی.
+- آدرس‌ها کامل و با https:// باشند. آدرسی را که نمی‌دانی حدس نزن؛ رشته‌ی خالی بگذار.
+- bio.en و bio.fa متن ساده‌اند؛ پاراگراف‌ها را با یک خط خالی (\\n\\n) جدا کن. HTML و مارک‌داون ننویس.
+- در links آیتم اول دکمه‌ی «ارتباط با من» است؛ مهم‌ترین راه ارتباطی را اول بگذار.
+- در projects فقط برای ۲ تا ۳ پروژه‌ی مهم featured را true بگذار و بقیه false. توضیح هر پروژه ۱ تا ۳ جمله باشد. فیلد image را نیاور (از پنل ادمین آپلود می‌شود).
+- چیزی درباره‌ی من اختراع نکن؛ فقط از اطلاعاتی که می‌دهم استفاده کن. اگر اطلاعاتی کم بود، همان فیلد را خالی بگذار.
+
+ساختار دقیق:
+{
+ "profile": { "brandFa": "", "nameFa": "", "nameEn": "", "tagline": {"en": "", "fa": ""}, "bio": {"en": "", "fa": ""} },
+ "links": [ { "label": "", "url": "" } ],
+ "translations": [ { "title": "", "desc": {"en": "", "fa": ""}, "url": "" } ],
+ "projects": [ { "name": {"en": "", "fa": ""}, "featured": false, "desc": {"en": "", "fa": ""}, "url": "", "repo": "" } ]
+}
+
+JSON فعلی سایت (برای حفظ سبک و داده‌های موجود):
+{{JSON}}
+
+اطلاعات من:
+(اینجا بنویس)`;
+const keepImg=items=>{const old=new Map((E.projects||[]).filter(o=>o.image).flatMap(o=>[o.name&&o.name.en,o.name&&o.name.fa].filter(Boolean).map(n=>[n.toLowerCase(),o.image])));
+ items.forEach(p=>{if(!p.image){const n=[p.name&&p.name.en,p.name&&p.name.fa].filter(Boolean).map(x=>x.toLowerCase()).find(x=>old.has(x));if(n)p.image=old.get(n)}})};
 const merge=(a,b)=>{for(const k of Object.keys(b)){if(k==='__proto__'||k==='constructor'||k==='prototype')continue;const v=b[k];if(v&&typeof v==='object'&&!Array.isArray(v)){if(typeof a[k]!=='object'||a[k]===null)a[k]={};merge(a[k],v)}else a[k]=v}};
 function importJson(){
  const t=$('#imp').value.trim();if(!t)return msg('ابتدا JSON را بچسبان یا فایل را انتخاب کن',1);
@@ -166,7 +211,7 @@ function importJson(){
  if(!add&&lists.length&&!confirm('این بخش‌ها با محتوای JSON جایگزین می‌شوند: '+lists.map(k=>names[k]).join('، ')+'\nادامه می‌دهی؟'))return;
  if(j.profile&&typeof j.profile==='object'&&!Array.isArray(j.profile)){merge(E.profile=E.profile||{},j.profile);['en','fa'].forEach(l=>{const v=E.profile.bio&&E.profile.bio[l];if(Array.isArray(v))E.profile.bio[l]=v.join('\n\n')});done.push(names.profile)}
  for(const k of lists){const items=j[k].filter(x=>x&&typeof x==='object'&&!Array.isArray(x));
-  if(k==='projects')items.forEach(p=>{if(typeof p.name==='string')p.name={en:p.name,fa:''}});
+  if(k==='projects'){items.forEach(p=>{if(typeof p.name==='string')p.name={en:p.name,fa:''}});keepImg(items)}
   E[k]=add?[...items,...(E[k]||[])]:items;done.push(names[k]+' ('+items.length+')')}
  if(!done.length)return msg('هیچ بخش شناخته‌شده‌ای در JSON نبود (profile، links، translations، projects)',1);
  OPEN='';draw();msg('اعمال شد: '+done.join('، ')+'. فرم‌ها را بررسی کن و بعد «ذخیره و انتشار» را بزن.')}
@@ -189,14 +234,14 @@ function draw(){
   const ttl=it=>{const v=get(it,tk);if(v)return v;const n=it.name;return typeof n==='string'?n:(n&&(n.fa||n.en))||''};
   const fld=(base,[p,l,kind],o)=>{
    const v=get(o,p)??'',key=base+'.'+p;
-   if(kind==='img')return `<label>${l}<input data-k="${key}" dir="ltr" value="${esc(v)}"></label>${v?`<img class="pi" src="${imgsrc(v)}" alt="" style="margin-top:0">`:''}<label class="up">آپلود تصویر (PNG، JPG یا WebP؛ خودکار کوچک می‌شود)<input type="file" accept="image/*" data-up="${key}"></label>`;
+   if(kind==='img')return `<label>${l}<input data-k="${key}" dir="ltr" value="${esc(v)}"></label>${v?`<img class="pi" src="${imgsrc(v)}" alt="" style="margin-top:0">`:''}<label class="up">آپلود تصویر (PNG، JPG یا WebP؛ خودکار کوچک می‌شود)<input type="file" accept="image/*" data-up="${key}"></label><button type="button" class="btn ghost" data-icon="${base}">گرفتن آیکون از لینک پروژه (وب‌اپ)</button>`;
    if(kind==='chk')return `<label class="chk"><input type="checkbox" data-k="${key}"${v===true?' checked':''}><span>${l}</span></label>`;
    return `<label>${l}${kind==='area'?`<textarea data-k="${key}" dir="auto">${esc(v)}</textarea>`:kind==='sel'?`<select data-k="${key}"><option value="fa"${v!=='en'?' selected':''}>فارسی</option><option value="en"${v==='en'?' selected':''}>English</option></select>`:`<input data-k="${key}" ${kind==='date'?'type="date"':''} dir="auto" value="${esc(v)}">`}</label>`;
   };
   if(!tk)return `<div class="sec"><h2>${t}</h2>${f.map(x=>fld(k,x,E)).join('')}</div>`;
   return `<div class="sec"><h2>${t}</h2>${(E[k]||[]).map((it,i)=>`<details class="item"${OPEN===k+'.'+i?' open':''}><summary>${it.featured?'★ ':''}${esc(ttl(it)||'(بدون عنوان)')}</summary>${f.map(x=>fld(k+'.'+i,x,it)).join('')}<button class="btn ghost danger" data-del="${k}.${i}">حذف</button></details>`).join('')}<button class="btn ghost" data-add="${k}">+ افزودن</button></div>`;
  };
- shell(`<details class="item"><summary>درون‌ریزی از JSON (مثلاً خروجی هوش مصنوعی)</summary><label>JSON را اینجا بچسبان<textarea id="imp" dir="ltr" style="min-height:10rem" placeholder='{"profile":{…},"projects":[…]}'></textarea></label><label class="up">یا فایل JSON انتخاب کن<input type="file" id="impf" accept=".json,application/json"></label><label class="chk"><input type="checkbox" id="impa"><span>به موارد فعلی اضافه کن (جایگزین نکن)</span></label><p><button class="btn" data-imp="1">اعمال روی فرم‌ها</button> <button class="btn ghost" data-copy="1">کپی JSON فعلی</button></p></details>${SCHEMA.map(sec).join('')}<p><button class="btn" id="save">ذخیره و انتشار</button> <button class="btn ghost" id="out">خروج</button></p><p id="msg" role="status"></p><p class="muted">بعد از ذخیره، حدود یک دقیقه طول می‌کشد تا سایت به‌روز شود.</p>`);
+ shell(`<details class="item"><summary>درون‌ریزی از JSON (مثلاً خروجی هوش مصنوعی)</summary><label>JSON را اینجا بچسبان<textarea id="imp" dir="ltr" style="min-height:10rem" placeholder='{"profile":{…},"projects":[…]}'></textarea></label><label class="up">یا فایل JSON انتخاب کن<input type="file" id="impf" accept=".json,application/json"></label><label class="chk"><input type="checkbox" id="impa"><span>به موارد فعلی اضافه کن (جایگزین نکن)</span></label><p><button class="btn" data-imp="1">اعمال روی فرم‌ها</button> <button class="btn ghost" data-copy="1">کپی JSON فعلی</button> <button class="btn ghost" data-prompt="1">کپی پرامپت آماده</button></p></details>${SCHEMA.map(sec).join('')}<p><button class="btn" id="save">ذخیره و انتشار</button> <button class="btn ghost" id="out">خروج</button></p><p id="msg" role="status"></p><p class="muted">بعد از ذخیره، حدود یک دقیقه طول می‌کشد تا سایت به‌روز شود.</p>`);
  const m=$('#main');
  m.oninput=e=>{const k=e.target.dataset.k;if(!k)return;set(E,k,e.target.type==='checkbox'?e.target.checked:e.target.value)};
  m.onchange=async e=>{const t=e.target;
@@ -207,6 +252,10 @@ function draw(){
   catch(err){msg(err.message||'آپلود نشد',1)}t.value=''};
  m.onclick=async e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.imp)return importJson();
+  if(b.dataset.icon){const base=b.dataset.icon,pr=get(E,base);if(!pr||!pr.url)return msg('اول «آدرس دمو / سایت» پروژه را وارد کن',1);
+   b.disabled=true;msg('در حال گرفتن آیکون از لینک پروژه…');
+   try{pr.image=await iconFor(pr.url);OPEN=base;draw();msg('آیکون گرفته شد ✓ حالا «ذخیره و انتشار» را بزن.')}catch(err){msg(err.message||'آیکون پیدا نشد',1)}b.disabled=false;return}
+  if(b.dataset.prompt){const tx=PROMPT.replace('{{JSON}}',()=>JSON.stringify(E,null,2));return navigator.clipboard.writeText(tx).then(()=>msg('پرامپت کپی شد ✓ آخرش زیر «اطلاعات من» توضیحاتت را بنویس.')).catch(()=>{$('#imp').value=tx;msg('کپی خودکار نشد؛ پرامپت در کادر بالا قرار گرفت',1)})}
   if(b.dataset.copy){const tx=JSON.stringify(E,null,2);return navigator.clipboard.writeText(tx).then(()=>msg('JSON فعلی کپی شد ✓')).catch(()=>{$('#imp').value=tx;msg('کپی خودکار نشد؛ متن در کادر قرار گرفت',1)})}
   if(b.dataset.add){const k=b.dataset.add;const def=k==='notes'?{date:new Date().toISOString().slice(0,10),lang:'fa'}:k==='projects'?{name:{en:'',fa:''},featured:false}:{};(E[k]=E[k]||[]).unshift(def);OPEN=k+'.0';draw()}
   else if(b.dataset.del){const[k,i]=b.dataset.del.split('.');if(confirm('حذف شود؟')){E[k].splice(+i,1);OPEN='';draw()}}
@@ -216,6 +265,7 @@ function draw(){
    if(bad)return msg('همه‌ی آدرس‌ها باید با http:// یا https:// شروع شوند: '+bad,1);
    if(E.links.some(l=>!l.url))return msg('هر لینک باید آدرس داشته باشد',1);
    if((E.projects||[]).some(p=>!pick(p.name).trim()))return msg('هر پروژه باید حداقل یک نام (فارسی یا انگلیسی) داشته باشد',1);
+   for(const pr of(E.projects||[])){if(pr.url&&!pr.image&&!TRIED.has(pr.url)){TRIED.add(pr.url);try{msg('در حال گرفتن آیکون '+pick(pr.name)+'…');pr.image=await iconFor(pr.url)}catch{}}}
    b.disabled=true;msg('در حال ذخیره…');
    try{const r=await gh('PUT',{message:'Update content via admin',branch:D.branch||'main',sha:SHA,content:btoa(unescape(encodeURIComponent(JSON.stringify(E,null,2)+'\n')))});SHA=r.content.sha;D=JSON.parse(JSON.stringify(E));msg('ذخیره شد ✓ تا حدود یک دقیقه دیگر روی سایت دیده می‌شود.')}
    catch(err){msg(err.message,1)}b.disabled=false}};
