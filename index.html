@@ -62,6 +62,8 @@ label{display:block;margin-bottom:.75rem;font-weight:600}input,textarea,select{d
 label.chk{display:flex;align-items:center;gap:.6rem;cursor:pointer}label.chk input{display:inline-block;width:1.4rem;height:1.4rem;margin:0;padding:0;accent-color:var(--lapis)}
 .item{border:2px solid var(--line);border-radius:14px;padding:.75rem;margin-bottom:.75rem;background:#fff}.item summary{font-weight:700}.sec{margin-block:1.5rem}.sec>h2{font-size:1.4rem}.danger{color:#9b1c1c;border-color:#9b1c1c}#msg{font-weight:700}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.pi,.pm{width:64px;height:64px;border-radius:18px;border:2px solid var(--lapis);flex:none;margin-bottom:.75rem}.pi{object-fit:cover;background:#fff}
+.pm{display:grid;place-items:center;background:var(--lapis);color:var(--saff);font:400 2rem/1 var(--fd)}.up{font-size:.9rem;color:var(--soft)}
 </style>
 </head>
 <body>
@@ -99,6 +101,8 @@ const ext=u=>u?` target="_blank" rel="noopener"`:'';
 const STAR=(c,z)=>`<svg class="${c}" width="${z}" height="${z}" viewBox="0 0 200 200" fill="none" stroke="#0aa6a6" stroke-width="2" aria-hidden="true"><rect x="40" y="40" width="120" height="120"/><rect x="40" y="40" width="120" height="120" transform="rotate(45 100 100)"/><circle cx="100" cy="100" r="34"/><circle cx="100" cy="100" r="62"/></svg>`;
 const panel=(t,b,items,href,cta,note,lang)=>`<section class="panel"><h2>${t}</h2><p>${b}</p>${items.length?`<ul>${items.map(i=>`<li><a href="${i[1]}"${ext(i[2])} dir="auto">${esc(i[0])}</a></li>`).join('')}</ul>`:`<p class="muted">${note||T.empty}</p>`}<p class="act"><a class="btn ghost" href="${href}"${lang?` data-lang="${lang}"`:''}>${cta}</a></p></section>`;
 
+const imgsrc=u=>/^(https?:\/\/|img\/)/i.test(u||'')?esc(u):'';
+const pimg=x=>{const u=imgsrc(x.image);return u?`<img class="pi" src="${u}" alt="" loading="lazy" onerror="this.style.display='none'">`:`<span class="pm" aria-hidden="true">${esc(([...pick(x.name).trim()][0]||'•').toUpperCase())}</span>`};
 const pages={
 home(){const p=D.profile,c=D.links[0],n=notesFor().slice(0,3);
  return `<h1 class="sr">${esc(nm())}</h1><div class="wrap"><div class="cta-row">${c?`<a class="btn" href="${safe(c.url)}"${ext(1)}>${T.cta}</a>`:''}<a class="btn ghost" href="#about">${T.more}</a></div></div>
@@ -108,7 +112,7 @@ home(){const p=D.profile,c=D.links[0],n=notesFor().slice(0,3);
  <div class="wrap"><p class="lede">${esc((pick(p.bio)||'').split(/\n{2,}/)[0])}</p><p><a href="#about">${T.more}</a></p></div>`},
 notes(){const n=notesFor();return page(T.notes,T.nI,n.length?`<div class="rows">${n.map(x=>`<details><summary><span class="t" dir="${dirOf(x)}">${esc(x.title)}</span><span class="muted">${fmt(x.date)}</span></summary><div class="prose" dir="${dirOf(x)}">${paras(x.body)}</div></details>`).join('')}</div>`:`<p>${L==='en'?`${T.hzEn} <a href="#notes" data-lang="fa">${T.readFa}</a>`:T.empty}</p>`)},
 translations(){return page(T.translations,T.tI,`<div class="cards">${D.translations.map(x=>`<div><h2 dir="auto">${esc(x.title)}</h2><p>${esc(pick(x.desc))}</p>${x.url?`<a class="btn ghost" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}</div>`).join('')}</div>`)},
-projects(){return page(T.projects,T.pI,`<div class="cards">${sortProjects(D.projects).map(x=>`<div${x.featured?' class="feat"':''}>${x.featured?`<span class="badge">★ ${T.feat}</span>`:''}<h2 dir="auto">${esc(pick(x.name))}</h2><p>${esc(pick(x.desc))}</p><div class="cta-row" style="margin-top:auto">${x.url?`<a class="btn" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}${x.repo?`<a class="btn ghost" href="${safe(x.repo)}"${ext(1)}>${T.src}</a>`:''}</div></div>`).join('')}</div>`)},
+projects(){return page(T.projects,T.pI,`<div class="cards">${sortProjects(D.projects).map(x=>`<div${x.featured?' class="feat"':''}>${x.featured?`<span class="badge">★ ${T.feat}</span>`:''}${pimg(x)}<h2 dir="auto">${esc(pick(x.name))}</h2><p>${esc(pick(x.desc))}</p><div class="cta-row" style="margin-top:auto">${x.url?`<a class="btn" href="${safe(x.url)}"${ext(1)}>${T.open}</a>`:''}${x.repo?`<a class="btn ghost" href="${safe(x.repo)}"${ext(1)}>${T.src}</a>`:''}</div></div>`).join('')}</div>`)},
 about(){const p=D.profile;return page(esc(nm()),esc(pick(p.tagline)),`<div class="prose" dir="${L==='fa'?'rtl':'ltr'}">${paras(pick(p.bio))}</div><ul class="links">${D.links.map((l,i)=>`<li><a class="btn${i?' ghost':''}" href="${safe(l.url)}"${ext(1)}>${esc(l.label)}</a></li>`).join('')}</ul>`)}};
 
 function chrome(){const r=route();
@@ -138,12 +142,34 @@ const SCHEMA=[
 ['links','لینک‌ها','label',[['label','عنوان'],['url','آدرس (با https)']]],
 ['notes','یادداشت‌ها','title',[['title','عنوان'],['date','تاریخ','date'],['lang','زبان متن','sel'],['body','متن (بین پاراگراف‌ها یک خط خالی)','area']]],
 ['translations','ترجمه‌ها','title',[['title','عنوان'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','پیوند انتشار']]],
-['projects','پروژه‌ها','name.fa',[['name.fa','نام (فارسی)'],['name.en','نام (انگلیسی)'],['featured','پروژه‌ی ویژه (بالای فهرست و در صفحه‌ی اصلی)','chk'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس دمو / سایت'],['repo','آدرس گیت‌هاب']]]].filter(s=>NOTES||s[0]!=='notes');
+['projects','پروژه‌ها','name.fa',[['name.fa','نام (فارسی)'],['name.en','نام (انگلیسی)'],['featured','پروژه‌ی ویژه (بالای فهرست و در صفحه‌ی اصلی)','chk'],['image','آدرس تصویر / آیکون (img/… یا https://…)','img'],['desc.en','توضیح (انگلیسی)','area'],['desc.fa','توضیح (فارسی)','area'],['url','آدرس دمو / سایت'],['repo','آدرس گیت‌هاب']]]].filter(s=>NOTES||s[0]!=='notes');
 const get=(o,p)=>p.split('.').reduce((a,k)=>a?.[k],o);
 const set=(o,p,v)=>{const k=p.split('.'),l=k.pop();let c=o;for(const x of k){if(typeof c[x]!=='object'||c[x]===null)c[x]={};c=c[x]}c[l]=v};
 const api=()=>`https://api.github.com/repos/${D.repo}/contents/content.json`;
 async function gh(method,body){const r=await fetch(api()+(method==='GET'?`?ref=${D.branch||'main'}`:''),{method,headers:{Authorization:'Bearer '+ls.get('token'),Accept:'application/vnd.github+json'},body:body&&JSON.stringify(body)});
  if(!r.ok)throw new Error([401,403,404].includes(r.status)?`دسترسی نیست؛ توکن یا مقدار repo در content.json را بررسی کنید (${r.status})`:r.status===409||r.status===422?'تداخل نسخه؛ صفحه را دوباره باز کنید':`خطا (${r.status})`);return r.json()}
+async function upImg(file){
+ const bm=await createImageBitmap(file).catch(()=>{throw new Error('این فرمت تصویر پشتیبانی نمی‌شود (PNG، JPG یا WebP)')});
+ const z=Math.min(1,512/Math.max(bm.width,bm.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bm.width*z));c.height=Math.max(1,Math.round(bm.height*z));
+ c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+ let u=c.toDataURL('image/webp',.85),x='webp';if(!u.startsWith('data:image/webp')){u=c.toDataURL('image/png');x='png'}
+ const path=`img/p-${Date.now()}.${x}`;
+ const r=await fetch(`https://api.github.com/repos/${D.repo}/contents/${path}`,{method:'PUT',headers:{Authorization:'Bearer '+ls.get('token'),Accept:'application/vnd.github+json'},body:JSON.stringify({message:'Add project image',branch:D.branch||'main',content:u.split(',')[1]})});
+ if(!r.ok)throw new Error('آپلود تصویر ناموفق بود ('+r.status+')');return path}
+const merge=(a,b)=>{for(const k of Object.keys(b)){if(k==='__proto__'||k==='constructor'||k==='prototype')continue;const v=b[k];if(v&&typeof v==='object'&&!Array.isArray(v)){if(typeof a[k]!=='object'||a[k]===null)a[k]={};merge(a[k],v)}else a[k]=v}};
+function importJson(){
+ const t=$('#imp').value.trim();if(!t)return msg('ابتدا JSON را بچسبان یا فایل را انتخاب کن',1);
+ let j;try{j=JSON.parse(t.replace(/^\uFEFF/,'').replace(/^```(?:json)?\s*|\s*```$/g,''))}catch{return msg('JSON معتبر نیست؛ فقط خود JSON را بچسبان',1)}
+ if(!j||typeof j!=='object'||Array.isArray(j))return msg('ساختار باید یک آبجکت باشد، مثل {"projects":[…]}',1);
+ const add=$('#impa').checked,done=[],names={profile:'پروفایل',links:'لینک‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',notes:'یادداشت‌ها'};
+ const lists=['links','translations','projects','notes'].filter(k=>Array.isArray(j[k])&&(k!=='notes'||NOTES));
+ if(!add&&lists.length&&!confirm('این بخش‌ها با محتوای JSON جایگزین می‌شوند: '+lists.map(k=>names[k]).join('، ')+'\nادامه می‌دهی؟'))return;
+ if(j.profile&&typeof j.profile==='object'&&!Array.isArray(j.profile)){merge(E.profile=E.profile||{},j.profile);['en','fa'].forEach(l=>{const v=E.profile.bio&&E.profile.bio[l];if(Array.isArray(v))E.profile.bio[l]=v.join('\n\n')});done.push(names.profile)}
+ for(const k of lists){const items=j[k].filter(x=>x&&typeof x==='object'&&!Array.isArray(x));
+  if(k==='projects')items.forEach(p=>{if(typeof p.name==='string')p.name={en:p.name,fa:''}});
+  E[k]=add?[...items,...(E[k]||[])]:items;done.push(names[k]+' ('+items.length+')')}
+ if(!done.length)return msg('هیچ بخش شناخته‌شده‌ای در JSON نبود (profile، links، translations، projects)',1);
+ OPEN='';draw();msg('اعمال شد: '+done.join('، ')+'. فرم‌ها را بررسی کن و بعد «ذخیره و انتشار» را بزن.')}
 const msg=(t,bad)=>{const m=$('#msg');if(m){m.textContent=t;m.style.color=bad?'#9b1c1c':'var(--turq-d)'}};
 const shell=b=>{$('#main').innerHTML=`<div class="page wrap" dir="rtl" lang="fa" style="font-family:var(--ff)"><h1>ادمین</h1>${b}</div>`};
 
@@ -163,16 +189,25 @@ function draw(){
   const ttl=it=>{const v=get(it,tk);if(v)return v;const n=it.name;return typeof n==='string'?n:(n&&(n.fa||n.en))||''};
   const fld=(base,[p,l,kind],o)=>{
    const v=get(o,p)??'',key=base+'.'+p;
+   if(kind==='img')return `<label>${l}<input data-k="${key}" dir="ltr" value="${esc(v)}"></label>${v?`<img class="pi" src="${imgsrc(v)}" alt="" style="margin-top:0">`:''}<label class="up">آپلود تصویر (PNG، JPG یا WebP؛ خودکار کوچک می‌شود)<input type="file" accept="image/*" data-up="${key}"></label>`;
    if(kind==='chk')return `<label class="chk"><input type="checkbox" data-k="${key}"${v===true?' checked':''}><span>${l}</span></label>`;
    return `<label>${l}${kind==='area'?`<textarea data-k="${key}" dir="auto">${esc(v)}</textarea>`:kind==='sel'?`<select data-k="${key}"><option value="fa"${v!=='en'?' selected':''}>فارسی</option><option value="en"${v==='en'?' selected':''}>English</option></select>`:`<input data-k="${key}" ${kind==='date'?'type="date"':''} dir="auto" value="${esc(v)}">`}</label>`;
   };
   if(!tk)return `<div class="sec"><h2>${t}</h2>${f.map(x=>fld(k,x,E)).join('')}</div>`;
   return `<div class="sec"><h2>${t}</h2>${(E[k]||[]).map((it,i)=>`<details class="item"${OPEN===k+'.'+i?' open':''}><summary>${it.featured?'★ ':''}${esc(ttl(it)||'(بدون عنوان)')}</summary>${f.map(x=>fld(k+'.'+i,x,it)).join('')}<button class="btn ghost danger" data-del="${k}.${i}">حذف</button></details>`).join('')}<button class="btn ghost" data-add="${k}">+ افزودن</button></div>`;
  };
- shell(`${SCHEMA.map(sec).join('')}<p><button class="btn" id="save">ذخیره و انتشار</button> <button class="btn ghost" id="out">خروج</button></p><p id="msg" role="status"></p><p class="muted">بعد از ذخیره، حدود یک دقیقه طول می‌کشد تا سایت به‌روز شود.</p>`);
+ shell(`<details class="item"><summary>درون‌ریزی از JSON (مثلاً خروجی هوش مصنوعی)</summary><label>JSON را اینجا بچسبان<textarea id="imp" dir="ltr" style="min-height:10rem" placeholder='{"profile":{…},"projects":[…]}'></textarea></label><label class="up">یا فایل JSON انتخاب کن<input type="file" id="impf" accept=".json,application/json"></label><label class="chk"><input type="checkbox" id="impa"><span>به موارد فعلی اضافه کن (جایگزین نکن)</span></label><p><button class="btn" data-imp="1">اعمال روی فرم‌ها</button> <button class="btn ghost" data-copy="1">کپی JSON فعلی</button></p></details>${SCHEMA.map(sec).join('')}<p><button class="btn" id="save">ذخیره و انتشار</button> <button class="btn ghost" id="out">خروج</button></p><p id="msg" role="status"></p><p class="muted">بعد از ذخیره، حدود یک دقیقه طول می‌کشد تا سایت به‌روز شود.</p>`);
  const m=$('#main');
  m.oninput=e=>{const k=e.target.dataset.k;if(!k)return;set(E,k,e.target.type==='checkbox'?e.target.checked:e.target.value)};
+ m.onchange=async e=>{const t=e.target;
+  if(t.id==='impf'){const f=t.files[0];if(f)f.text().then(x=>{$('#imp').value=x});return}
+  const f=t.files&&t.files[0],k=t.dataset.up;if(!f||!k)return;
+  if(f.size>8e6)return msg('حجم تصویر باید کمتر از ۸ مگابایت باشد',1);
+  try{msg('در حال آپلود تصویر…');const path=await upImg(f);set(E,k,path);const inp=m.querySelector(`[data-k="${k}"]`);if(inp)inp.value=path;msg('تصویر آپلود شد ✓ حالا «ذخیره و انتشار» را بزن.')}
+  catch(err){msg(err.message||'آپلود نشد',1)}t.value=''};
  m.onclick=async e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.imp)return importJson();
+  if(b.dataset.copy){const tx=JSON.stringify(E,null,2);return navigator.clipboard.writeText(tx).then(()=>msg('JSON فعلی کپی شد ✓')).catch(()=>{$('#imp').value=tx;msg('کپی خودکار نشد؛ متن در کادر قرار گرفت',1)})}
   if(b.dataset.add){const k=b.dataset.add;const def=k==='notes'?{date:new Date().toISOString().slice(0,10),lang:'fa'}:k==='projects'?{name:{en:'',fa:''},featured:false}:{};(E[k]=E[k]||[]).unshift(def);OPEN=k+'.0';draw()}
   else if(b.dataset.del){const[k,i]=b.dataset.del.split('.');if(confirm('حذف شود؟')){E[k].splice(+i,1);OPEN='';draw()}}
   else if(b.id==='out'){ls.del('token');location.hash='#home'}
