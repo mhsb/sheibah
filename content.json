@@ -34,32 +34,6 @@
   ],
   "posts": [
     {
-      "id": "n0",
-      "type": "article",
-      "title": {
-        "fa": "نمونه‌ی یادداشت درسی",
-        "en": ""
-      },
-      "desc": {},
-      "body": "این یک یادداشت نمونه است.\n\nپاراگراف دوم. پیش از انتشار حذفش کنید.",
-      "lang": "fa",
-      "date": "2026-01-15"
-    },
-    {
-      "id": "t0",
-      "type": "translation",
-      "title": {
-        "en": "به زودی/Coming soon",
-        "fa": ""
-      },
-      "desc": {
-        "en": "Soon I'll showcase some of my translations from Persian to English here.",
-        "fa": "به زودی بعضی از ترجمه های فارسی به انگلیسی خودم رو اینجا قرار میدم."
-      },
-      "url": "https://example.com",
-      "date": ""
-    },
-    {
       "id": "p0",
       "type": "project",
       "title": {
