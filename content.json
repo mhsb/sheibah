@@ -32,132 +32,156 @@
       "url": "https://www.linkedin.com/in/hoseinsheibah"
     }
   ],
-  "notes": [
+  "posts": [
     {
-      "title": "نمونه‌ی یادداشت درسی",
-      "date": "2026-01-15",
+      "id": "n0",
+      "type": "article",
+      "title": {
+        "fa": "نمونه‌ی یادداشت درسی",
+        "en": ""
+      },
+      "desc": {},
+      "body": "این یک یادداشت نمونه است.\n\nپاراگراف دوم. پیش از انتشار حذفش کنید.",
       "lang": "fa",
-      "body": "این یک یادداشت نمونه است.\n\nپاراگراف دوم. پیش از انتشار حذفش کنید."
-    }
-  ],
-  "translations": [
+      "date": "2026-01-15"
+    },
     {
-      "title": "به زودی/Coming soon",
+      "id": "t0",
+      "type": "translation",
+      "title": {
+        "en": "به زودی/Coming soon",
+        "fa": ""
+      },
       "desc": {
         "en": "Soon I'll showcase some of my translations from Persian to English here.",
         "fa": "به زودی بعضی از ترجمه های فارسی به انگلیسی خودم رو اینجا قرار میدم."
       },
-      "url": "https://example.com"
-    }
-  ],
-  "projects": [
+      "url": "https://example.com",
+      "date": ""
+    },
     {
-      "name": {
+      "id": "p0",
+      "type": "project",
+      "title": {
         "en": "Tarikhdooni",
         "fa": "تاریخ‌دونی"
       },
-      "featured": true,
       "desc": {
         "en": "An interactive timeline and historical reference app for exploring historical eras, topics, and calendars side by side.",
         "fa": "یک گاه‌شمار تعاملی و مرجع تاریخی برای بررسی بازه‌های زمانی، تقویم‌ها و موضوعات گوناگون تاریخی در کنار یکدیگر."
       },
       "url": "https://mhsb.github.io/tarikhdooni/",
       "repo": "https://github.com/mhsb/tarikhdooni",
-      "image": "img/p-1793802907127.webp"
+      "image": "img/p-1793802907127.webp",
+      "date": ""
     },
     {
-      "name": {
+      "id": "p1",
+      "type": "project",
+      "title": {
         "en": "Compeng",
         "fa": "کامپنگ"
       },
-      "featured": true,
       "desc": {
         "en": "A simple gamified English course for children to learn simple computer terminology offline.",
         "fa": "کامپنگ، کامپیوتر و انگلیسی:یک دوره ساده و بازی محور زبان انگلیسی با هدف آموزش زبان در حد کار ساده با کامپیوتر به کودکان، بدون نیاز به اینترنت"
       },
       "url": "https://mhsb.github.io/compeng/",
-      "repo": "https://github.com/mhsb/compeng"
+      "repo": "https://github.com/mhsb/compeng",
+      "date": ""
     },
     {
-      "name": {
+      "id": "p2",
+      "type": "project",
+      "title": {
         "en": "JameJamoJur",
         "fa": "جامـ جمــ ـع و جور"
       },
-      "featured": true,
       "desc": {
         "en": "Combining three projects: Atlasak, Manzoumak, and Asemanak. In a single app, you have a complete map of the globe with country introduction cards, a detailed map of Iran, a 3D solar system, and a sky dome that shows you the Sun’s path across different seasons.",
         "fa": "جامـ جمــ ـع و جور\nترکیب سه پروژه: اطلسک، منظومک و آسمانک. در یک برنامه هم یک نقشه کامل کره زمین داری با کارتهای معرفی کشورها، هم یک نقشه دقیق ایران، هم یک منظومه شمسی سه بعدی، و هم یک گنبد آسمان که مسیر حرکت خورشید در فصول مختلف رو به تو نشون میده."
       },
       "url": "https://mhsb.github.io/jamejamojur",
       "repo": "https://github.com/mhsb/jamejamojur",
-      "image": "https://github.com/mhsb/jamejamojur/blob/main/assets/icons/icon-512.png"
+      "image": "img/p-1794133429481.webp",
+      "date": ""
     },
     {
-      "name": {
+      "id": "p3",
+      "type": "project",
+      "title": {
         "en": "asemanak",
         "fa": "آسمانک"
       },
-      "featured": false,
       "desc": {
         "en": "An interactive sky dome, to show the path for the movement of the sun in different seasons, in various cities.",
         "fa": "یک گنبد آسمان تعاملی، با قابلیت نشان داد مسیر حرکت خورشید در فصل های مختلف، در شهرهای مختلف"
       },
       "url": "https://mhsb.github.io/asemanak/",
-      "repo": "https://github.com/mhsb/asemanak"
+      "repo": "https://github.com/mhsb/asemanak",
+      "date": ""
     },
     {
-      "name": {
+      "id": "p4",
+      "type": "project",
+      "title": {
         "en": "sunclock",
         "fa": "ساعت غروب کوک"
       },
-      "featured": true,
       "desc": {
         "en": "A sunset-to-sunset clock for traditions that begin the day at sunset. It shows the time since (or until) sunset under a sky that follows the real sun, with prayer times and the Hijri date. Everything is calculated on your device, so it works offline, and it can be installed as an app.",
         "fa": "ساعتی از غروب تا غروب، برای کسانی که روز را از غروب آغاز می‌کنند. مدت زمان گذشته از غروب (یا باقی‌مانده تا آن) را زیر آسمانی نشان می‌دهد که از موقعیت واقعی خورشید پیروی می‌کند؛ همراه با اوقات شرعی و تاریخ قمری. همه‌چیز روی خود دستگاه محاسبه می‌شود، پس بدون اینترنت هم کار می‌کند و می‌شود آن را به‌صورت برنامه نصب کرد."
       },
       "url": "https://mhsb.github.io/sunclock/",
       "repo": "https://github.com/mhsb/sunclock",
-      "image": "img/p-1793801018211.webp"
+      "image": "img/p-1793801018211.webp",
+      "date": ""
     },
     {
-      "name": {
+      "id": "p5",
+      "type": "project",
+      "title": {
         "en": "inarobeg.ir",
         "fa": "ایناروبگـ.ـیر"
       },
-      "featured": true,
       "desc": {
         "en": "A new way to make shopping lists. A lightweight web app that opens in the browser and can be installed on your phone. You can create items, write the price, check price history, choose number or amounts. But, the second you just start typing and everything is there: the name, the price... and you're just a tap away from a done job.",
         "fa": "شیوه‌ای تازه برای ساختن فهرست خرید. یک وب‌اپ سبک که در مرورگر باز می‌شود و می‌شود آن را روی گوشی نصب کرد. اسم و قیمت رو وارد میکنی و تعداد رو میزنی. دفعه بعد، فقط شروع به تایپ اسم میکنی و با یک تپ اسم میره توی لیست. تاریخچه قیمت ها رو میبینی و گزارش خریدهای قبلیت رو."
       },
       "url": "https://inarobeg.ir",
       "repo": "https://github.com/mhsb/inarobegir",
-      "image": "img/p-1793800987855.webp"
+      "image": "img/p-1793800987855.webp",
+      "date": ""
     },
     {
-      "name": {
+      "id": "p6",
+      "type": "project",
+      "title": {
         "en": "atlasak",
         "fa": "اطلسک"
       },
-      "featured": false,
       "desc": {
         "en": "A small atlas for children that also works offline, with pages for the world, for Iran, and for countries.",
         "fa": "یک اطلس کوچک برای کودکان، با قابلیت کار آفلاین؛ شامل صفحه‌هایی برای اطلس جهان، اطلس ایران و کشورها."
       },
       "url": "https://mhsb.github.io/atlasak",
-      "repo": "https://github.com/mhsb/atlasak"
+      "repo": "https://github.com/mhsb/atlasak",
+      "date": ""
     },
     {
-      "name": {
+      "id": "p7",
+      "type": "project",
+      "title": {
         "en": "manzumak",
         "fa": "منظومک"
       },
-      "featured": false,
       "desc": {
         "en": "A 3D solar system for children, made so they can see how the seasons move.",
         "fa": "یک منظومه‌ی شمسی سه‌بعدی برای کودکان، تا بتوانند حرکت فصل‌ها را ببینند."
       },
       "url": "https://mhsb.github.io/manzumak",
-      "repo": "https://github.com/mhsb/manzumak"
+      "repo": "https://github.com/mhsb/manzumak",
+      "date": ""
     }
   ]
 }
