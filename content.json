@@ -40,13 +40,14 @@
         "en": "Baghe Hefz"
       },
       "desc": {
-        "fa": "باغ حفظ؛ یک وب‌اپ که در مرورگر باز می‌شود.",
-        "en": "Baghe Hefz; a web app that opens in the browser."
+        "fa": "باغ حفظ؛ یک فضای با نمک و دوست داشتنی برای حفظ جزء سی.",
+        "en": "Baghe Hefz; a cute space for memorizing surahs of Quran in Juz' 30."
       },
       "url": "https://mhsb.github.io/baghe-hefz",
       "repo": "https://GitHub.com/mhsb/baghe-hefz",
       "date": "2026-11-08",
-      "id": "mw7p09izgwj"
+      "id": "mw7p09izgwj",
+      "image": "https://github.com/mhsb/baghe-hefz/blob/main/icon-512.png"
     },
     {
       "type": "project",
