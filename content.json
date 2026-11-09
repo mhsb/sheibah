@@ -36,6 +36,22 @@
     {
       "type": "project",
       "title": {
+        "fa": "دفترچه واژه‌یاب",
+        "en": "Dictionary Notebook"
+      },
+      "desc": {
+        "fa": "یک وب‌اپلیکیشن آفلاین و سبک برای خواندن دیکشنری‌های MDict (mdx.) همراه با دفترچه‌ی جعبه‌ی لایتنر. بدون نیاز به سرور، بیلد یا وابستگی.",
+        "en": "A static, offline-capable PWA: a lightweight reader for MDict (.mdx) dictionaries plus a Leitner-box notebook. No build step, no dependencies, no server."
+      },
+      "date": "2026-11-09",
+      "url": "https://mhsb.github.io/lexibox/",
+      "repo": "https://github.com/mhsb/lexibox",
+      "id": "mw95jl9m7pg",
+      "image": "img/p-1794222196229.webp"
+    },
+    {
+      "type": "project",
+      "title": {
         "fa": "باغ حفظ",
         "en": "Baghe Hefz"
       },
