@@ -227,10 +227,12 @@ function reveal(){const els=[...document.querySelectorAll('.rv')];
 function robots(v){let m=$('meta[name=robots]');if(!v){m&&m.remove();return}if(!m){m=document.createElement('meta');m.name='robots';document.head.appendChild(m)}m.content=v}
 /* optional visitor stats: set profile.goatcounter to your GoatCounter code (hash routes are counted as /p/ID, /article ...) */
 let GC=0,TRd=0;
-function track(){const c=D&&D.profile&&D.profile.goatcounter;if(!c||!/^[a-z0-9-]+$/i.test(c)||route()==='admin')return;
+function track(){try{trk()}catch{}}
+function trk(){const c=String((D&&D.profile&&D.profile.goatcounter)||'').trim().replace(/^https?:\/\//i,'').replace(/\.goatcounter\.com.*$/i,'');if(!c||!/^[a-z0-9-]+$/i.test(c)||route()==='admin')return;
  if(!GC){GC=1;window.goatcounter={no_onload:true};const sc=document.createElement('script');sc.async=true;sc.src='https://gc.zgo.at/count.js';sc.dataset.goatcounter='https://'+c+'.goatcounter.com/count';document.head.appendChild(sc)}
  let n=0;const send=()=>window.goatcounter&&window.goatcounter.count?window.goatcounter.count({path:'/'+(location.hash||'#home').slice(1),title:document.title}):n++<20&&setTimeout(send,300);send()}
-function render(anim){T=U[L];const h=document.documentElement;h.lang=L;h.dir=L==='fa'?'rtl':'ltr';chrome();layout();const r=route();
+function render(anim){try{render0(anim)}catch(e){console.error(e);const m=$('#main');if(m)m.innerHTML='<p class="wrap page" dir="ltr">Error: '+esc((e&&e.message)||e)+'</p>';document.querySelectorAll('.rv').forEach(x=>x.classList.add('in'))}}
+function render0(anim){T=U[L];const h=document.documentElement;h.lang=L;h.dir=L==='fa'?'rtl':'ltr';chrome();layout();const r=route();
  if(!D){$('#main').innerHTML=`<p class="wrap page">${T.err}</p>`;return}
  const hx=r.startsWith('p/')?posts().find(p=>String(p.id)===decodeURIComponent(r.slice(2))):null;
  robots(r==='admin'||(hx&&hx.listed===false)?'noindex,nofollow':'');
@@ -238,11 +240,10 @@ function render(anim){T=U[L];const h=document.documentElement;h.lang=L;h.dir=L==
  $('#main').innerHTML=r==='about'?pages.about():r.startsWith('p/')?pages.post(decodeURIComponent(r.slice(2))):pages.feed(TY.includes(r)?r:'');
  document.title=(r==='home'||!r?'':(cur()==='home'?'':tlabel(cur())+' — '))+nm()+' · '+(L==='fa'?D.profile.brandFa:'Sheibah');
  if(anim){const m=$('#main');m.classList.remove('pg');void m.offsetWidth;m.classList.add('pg')}
- if(!TRd){TRd=1;track()}
- reveal()}
+ reveal();if(!TRd){TRd=1;setTimeout(track,0)}}
 
 document.addEventListener('click',e=>{const a=e.target.closest('[data-lang]');if(!a)return;L=a.dataset.lang;ls.set('lang',L);if(a.tagName==='BUTTON'||a.getAttribute('href')===location.hash)render()});
-addEventListener('hashchange',()=>{render(true);scrollTo(0,0);track()});
+addEventListener('hashchange',()=>{render(true);scrollTo(0,0);setTimeout(track,0)});
 document.addEventListener('pointermove',e=>{const c=e.target.closest&&e.target.closest('.card');if(c){const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')}},{passive:true});
 
 /* hidden admin entry: long-press the logo for 3s, or tap the copyright line 5 times */
@@ -376,7 +377,7 @@ function draw(){
   if(!tk)return `<div class="sec"><h2>${t}</h2>${f.map(x=>fld(k,x,E)).join('')}</div>`;
   return `<div class="sec"><h2>${t}</h2>${(E[k]||[]).map((it,i)=>`<details class="item"${OPEN===k+'.'+i?' open':''}><summary>${esc(ttl(it)||'(بدون عنوان)')}</summary>${f.map(x=>fld(k+'.'+i,x,it)).join('')}${k==='posts'?`<button type="button" class="btn ghost" data-cl="${esc(it.id)}">کپی لینک این پست</button> `:''}<button class="btn ghost danger" data-del="${k}.${i}">حذف</button></details>`).join('')}<button class="btn ghost" data-add="${k}">+ افزودن</button></div>`;
  };
- shell(`<details class="item"><summary>درون‌ریزی از JSON (مثلاً خروجی هوش مصنوعی)</summary><label>JSON را اینجا بچسبان<textarea id="imp" dir="ltr" style="min-height:10rem" placeholder='{"profile":{…},"posts":[…]}'></textarea></label><label class="up">یا فایل JSON انتخاب کن<input type="file" id="impf" accept=".json,application/json"></label><label class="up">بارگذاری فایل‌های مارکداون (.md)؛ هر فایل یک پست جدید<input type="file" id="mdf" accept=".md,.markdown,text/markdown,text/plain" multiple></label><label class="chk"><input type="checkbox" id="impa"><span>به موارد فعلی اضافه کن (جایگزین نکن)</span></label><p><button class="btn" data-imp="1">اعمال روی فرم‌ها</button> <button class="btn ghost" data-copy="1">کپی JSON فعلی</button> <button class="btn ghost" data-prompt="1">کپی پرامپت آماده</button></p></details>${SCHEMA.map(sec).join('')}<p><button class="btn" id="save">ذخیره و انتشار</button> <button class="btn ghost" id="out">خروج</button></p><p id="msg" role="status"></p><p class="muted">بعد از ذخیره، حدود یک دقیقه طول می‌کشد تا سایت به‌روز شود.</p>`);
+ shell(`<details class="item"><summary>درون‌ریزی از JSON (مثلاً خروجی هوش مصنوعی)</summary><label>JSON را اینجا بچسبان<textarea id="imp" dir="ltr" style="min-height:10rem" placeholder='{"profile":{…},"posts":[…]}'></textarea></label><label class="up">یا فایل JSON انتخاب کن<input type="file" id="impf" accept=".json,application/json"></label><label class="up">بارگذاری فایل‌های مارکداون (.md)؛ هر فایل یک پست جدید<input type="file" id="mdf" accept=".md,.markdown,text/markdown,text/plain" multiple></label><label class="chk"><input type="checkbox" id="impa"><span>به موارد فعلی اضافه کن (جایگزین نکن)</span></label><p><button class="btn" data-imp="1">اعمال روی فرم‌ها</button> <button class="btn ghost" data-copy="1">کپی JSON فعلی</button> <button class="btn ghost" data-prompt="1">کپی پرامپت آماده</button></p></details>${SCHEMA.map(sec).join('')}<p><button class="btn" id="save">ذخیره و انتشار</button></p><p id="msg" role="status"></p><p class="muted">بعد از ذخیره، حدود یک دقیقه طول می‌کشد تا سایت به‌روز شود.</p><p style="margin-top:4rem"><button class="btn ghost danger" id="out">خروج (توکن از این مرورگر پاک می‌شود)</button></p>`);
  const m=$('#main');
  m.oninput=e=>{const k=e.target.dataset.k;if(!k)return;set(E,k,e.target.type==='checkbox'?e.target.checked:e.target.value)};
  m.onchange=async e=>{const t=e.target;
@@ -396,7 +397,7 @@ function draw(){
   if(b.dataset.copy){const tx=JSON.stringify(E,null,2);return navigator.clipboard.writeText(tx).then(()=>msg('JSON فعلی کپی شد ✓')).catch(()=>{$('#imp').value=tx;msg('کپی خودکار نشد؛ متن در کادر قرار گرفت',1)})}
   if(b.dataset.add){const k=b.dataset.add,def=k==='posts'?{id:nid(),type:'article',listed:true,date:new Date().toISOString().slice(0,10),lang:'fa',title:{fa:'',en:''},desc:{fa:'',en:''}}:{};(E[k]=E[k]||[]).unshift(def);OPEN=k+'.0';draw()}
   else if(b.dataset.del){const[k,i]=b.dataset.del.split('.');if(confirm('حذف شود؟')){E[k].splice(+i,1);OPEN='';draw()}}
-  else if(b.id==='out'){ls.del('token');location.hash='#home'}
+  else if(b.id==='out'){if(confirm('از ادمین خارج می‌شوی و توکن از این مرورگر پاک می‌شود. ادامه؟')){ls.del('token');location.hash='#home'}}
   else if(b.id==='save'){
    const bad=[E.links,E.posts].flatMap(a=>(a||[]).flatMap(x=>[x.url,x.repo])).find(u=>u&&!/^https?:\/\//i.test(u));
    if(bad)return msg('همه‌ی آدرس‌ها باید با http:// یا https:// شروع شوند: '+bad,1);
