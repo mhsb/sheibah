@@ -12,7 +12,8 @@
     "bio": {
       "en": "Placeholder bio. Replace it from the admin page.",
       "fa": "متن موقت. از صفحه‌ی ادمین جایگزینش کنید."
-    }
+    },
+    "goatcounter": "<script data-goatcounter=\"https://sheibah.goatcounter.com/count\"         async src=\"//gc.zgo.at/count.js\"></script>"
   },
   "links": [
     {
