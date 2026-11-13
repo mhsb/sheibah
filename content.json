@@ -65,7 +65,8 @@
       "repo": "https://GitHub.com/mhsb/baghe-hefz",
       "date": "2026-11-08",
       "id": "mw7p09izgwj",
-      "image": "img/p-1794137427721.webp"
+      "image": "img/p-1794137427721.webp",
+      "slug": "baghe-hefz"
     },
     {
       "type": "project",
@@ -81,7 +82,8 @@
       "repo": "https://github.com/mhsb/tarikhdooni",
       "date": "",
       "id": "mw7p09izb8z",
-      "image": "img/p-1793802907127.webp"
+      "image": "img/p-1793802907127.webp",
+      "slug": "tarikhdooni"
     },
     {
       "type": "project",
