@@ -190,8 +190,8 @@ const safe=u=>/^https?:\/\//i.test(u||'')?esc(u):'#';
 const imgsrc=u=>/^(https?:\/\/|img\/)/i.test(u||'')?esc(u):'';
 const ls={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}},del(k){try{localStorage.removeItem(k)}catch{}}};
 const U={
-en:{all:'All',articles:'Articles',translations:'Translations',projects:'Projects',about:'About',latest:'Latest updates',article:'Article',translation:'Translation',project:'Project',posts:'posts',empty:'Nothing here yet.',back:'Back',demo:'Open',read:'View translation',origin:'Original source',src:'Source code',err:'Could not load content.json. Open the site through GitHub Pages or a local web server, not as a plain file.',rights:'All rights reserved.'},
-fa:{all:'همه',articles:'مقاله‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',about:'درباره',latest:'آخرین به‌روزرسانی‌ها',article:'مقاله',translation:'ترجمه',project:'پروژه',posts:'پست',empty:'هنوز چیزی اینجا نیست.',back:'بازگشت',demo:'باز کردن',read:'مشاهده‌ی ترجمه',origin:'منبع اصلی',src:'کد منبع',err:'فایل content.json بارگذاری نشد. سایت را از طریق GitHub Pages یا یک وب‌سرور باز کنید، نه به‌صورت فایل ساده.',rights:'همه‌ی حقوق محفوظ است.'}};
+en:{all:'All',articles:'Articles',translations:'Translations',projects:'Projects',about:'About',latest:'Latest updates',article:'Article',translation:'Translation',project:'Project',posts:'posts',empty:'Nothing here yet.',back:'Back',nf:'This post was not found.',demo:'Open',read:'View translation',origin:'Original source',src:'Source code',err:'Could not load content.json. Open the site through GitHub Pages or a local web server, not as a plain file.',rights:'All rights reserved.'},
+fa:{all:'همه',articles:'مقاله‌ها',translations:'ترجمه‌ها',projects:'پروژه‌ها',about:'درباره',latest:'آخرین به‌روزرسانی‌ها',article:'مقاله',translation:'ترجمه',project:'پروژه',posts:'پست',empty:'هنوز چیزی اینجا نیست.',back:'بازگشت',nf:'این پست پیدا نشد.',demo:'باز کردن',read:'مشاهده‌ی ترجمه',origin:'منبع اصلی',src:'کد منبع',err:'فایل content.json بارگذاری نشد. سایت را از طریق GitHub Pages یا یک وب‌سرور باز کنید، نه به‌صورت فایل ساده.',rights:'همه‌ی حقوق محفوظ است.'}};
 let D=null,E=null,SHA='',OPEN='',L=ls.get('lang')||((navigator.language||'').toLowerCase().startsWith('fa')?'fa':'en'),T=U[L];
 const TY=['article','translation','project'],FEED=['home',...TY],TABS=['home',...TY,'about'];
 const route=()=>(location.hash||'#home').slice(1);
@@ -199,6 +199,10 @@ const pick=o=>typeof o==='string'?o:(o&&(o[L]||o.en||o.fa))||'';
 const nm=()=>L==='fa'?D.profile.nameFa:D.profile.nameEn;
 const fmt=d=>{if(!d)return'';try{return new Intl.DateTimeFormat(L==='fa'?'fa-IR-u-ca-persian':'en-GB',{dateStyle:'long',timeZone:'UTC'}).format(new Date(d))}catch{return d}};
 const paras=t=>esc(t).split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+const RESERVED=['home','about','article','translation','project','admin','p','img','md','content','content.json','index','index.html','404','404.html','cname','logo','logo.png','robots.txt','sitemap.xml','favicon.ico','favicon.svg'];
+const slugify=s=>String(s||'').toLowerCase().replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-').replace(/^-+/,'');
+const pkey=x=>x.slug||x.id;
+const findPost=k=>{k=String(k||'');const l=k.toLowerCase();return posts().find(p=>(p.slug&&p.slug===l)||String(p.id)===k)};
 const nid=()=>{try{return[...crypto.getRandomValues(new Uint8Array(8))].map(b=>(b%36).toString(36)).join('')}catch{return Math.random().toString(36).slice(2,10)}};
 
 /* ---------- tiny safe Markdown renderer (HTML in the text is escaped, never executed) ---------- */
@@ -230,7 +234,7 @@ function mdToPost(t,name){const{meta,body}=fm(t);let b=body,title=meta.title||''
  if(!title)title=String(name||'').replace(/\.(md|markdown|txt)$/i,'');
  const fa=x=>/[\u0600-\u06FF]/.test(x),flag=(v,d)=>/^(true|yes|1)$/i.test(v||'')?true:/^(false|no|0)$/i.test(v||'')?false:d;
  const p={id:nid(),type:TY.includes(meta.type)?meta.type:'article',listed:!flag(meta.hidden||meta.unlisted,false)&&flag(meta.listed,true),title:{fa:'',en:''},desc:{fa:'',en:''},body:b,lang:fa(b)?'fa':'en',date:/^\d{4}-\d{2}-\d{2}$/.test(meta.date||'')?meta.date:new Date().toISOString().slice(0,10)};
- p.title[fa(title)?'fa':'en']=title;const d=meta.description||meta.desc||meta.summary||'';if(d)p.desc[fa(d)?'fa':'en']=d;return p}
+ p.title[fa(title)?'fa':'en']=title;{const sg=slugify(meta.slug).replace(/-+$/,'');if(sg&&!RESERVED.includes(sg))p.slug=sg}const d=meta.description||meta.desc||meta.summary||'';if(d)p.desc[fa(d)?'fa':'en']=d;return p}
 const tlabel=k=>k==='home'?T.all:k==='about'?T.about:T[k+'s'];
 
 /* ---------- data: one list of posts. Old content.json (projects / translations / notes) is converted on the fly ---------- */
@@ -243,14 +247,14 @@ const posts=()=>(Array.isArray(D.posts)?D.posts:legacy(D)).map(x=>({...x,type:TY
 const ICO={article:'<path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',translation:'<path d="M5 8h8M9 5v3M7 14c2-1 4-3 4-6M7 8c0 3 3 5 6 6"/><path d="M13 20l4-9 4 9M14.5 17h5"/>',project:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>'};
 const thumb=x=>{const u=imgsrc(x.image);return u?`<img src="${u}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:`<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[x.type]}</svg>`};
 const excerpt=x=>pick(x.desc)||(x.body||'').replace(/\s+/g,' ').slice(0,150);
-const card=(x,i)=>`<a class="card rv t-${x.type}${i===0?' big':''}" href="#p/${encodeURIComponent(x.id)}" style="--i:${Math.min(i,8)}"><div class="top"><span class="th">${thumb(x)}</span><span class="badge">${T[x.type]}</span><time class="muted" datetime="${esc(x.date)}">${fmt(x.date)}</time></div><h2 dir="auto">${esc(pick(x.title))}</h2><p dir="auto">${esc(excerpt(x))}</p></a>`;
+const card=(x,i)=>`<a class="card rv t-${x.type}${i===0?' big':''}" href="#p/${encodeURIComponent(pkey(x))}" style="--i:${Math.min(i,8)}"><div class="top"><span class="th">${thumb(x)}</span><span class="badge">${T[x.type]}</span><time class="muted" datetime="${esc(x.date)}">${fmt(x.date)}</time></div><h2 dir="auto">${esc(pick(x.title))}</h2><p dir="auto">${esc(excerpt(x))}</p></a>`;
 const page=(t,i,b)=>`<div class="page wrap rv"><h1>${t}</h1><p class="lede">${i}</p>${b}</div>`;
 const ext=u=>u?` target="_blank" rel="noopener"`:'';
 
 const pages={
 feed(f){const l=posts().filter(x=>x.listed!==false&&(!f||x.type===f));
  return `<div class="wrap"><div class="feedh rv"><h1>${f?tlabel(f):T.latest}</h1><span class="muted">${l.length} ${T.posts}</span></div>${l.length?`<div class="feed">${l.map(card).join('')}</div>`:`<p class="muted">${T.empty}</p>`}</div>`},
-post(id){const x=posts().find(p=>String(p.id)===id);if(!x)return pages.feed('');const dir=x.lang==='en'?'ltr':'rtl',body=x.body?`<div class="prose" dir="${dir}">${md(x.body)}</div>`:'';
+post(id){const x=findPost(id);if(!x)return `<div class="page wrap"><p class="lede">${T.nf}</p><p><a href="#home">‹ ${T.back}</a></p></div>`;const dir=x.lang==='en'?'ltr':'rtl',body=x.body?`<div class="prose" dir="${dir}">${md(x.body)}</div>`:'';
  return `<div class="page wrap"><article class="post t-${x.type}"><p class="rv"><a href="#${x.type}">‹ ${T.back}</a></p><div class="top rv" style="--i:1"><span class="th big">${thumb(x)}</span><span class="badge">${T[x.type]}</span><time class="muted" datetime="${esc(x.date)}">${fmt(x.date)}</time></div><h1 class="rv" style="--i:2" dir="auto">${esc(pick(x.title))}</h1>${pick(x.desc)?`<p class="lede rv" style="--i:3" dir="auto">${esc(pick(x.desc))}</p>`:''}<div class="cta-row rv" style="--i:4">${x.url?`<a class="btn" href="${safe(x.url)}"${ext(1)}>${x.type==='project'?T.demo:x.type==='translation'?T.read:T.origin}</a>`:''}${x.repo?`<a class="btn ghost" href="${safe(x.repo)}"${ext(1)}>${T.src}</a>`:''}</div><div class="rv" style="--i:5">${body}</div></article></div>`},
 about(){const p=D.profile;return page(esc(nm()),esc(pick(p.tagline)),`<div class="prose" dir="${L==='fa'?'rtl':'ltr'}">${paras(pick(p.bio))}</div><ul class="links">${D.links.map((l,i)=>`<li><a class="btn${i?' ghost':''}" href="${safe(l.url)}"${ext(1)}>${esc(l.label)}</a></li>`).join('')}</ul>`)}};
 
@@ -258,7 +262,7 @@ about(){const p=D.profile;return page(esc(nm()),esc(pick(p.tagline)),`<div class
 const ARP='M0 100V54C0 30 30 12 50 0C70 12 100 30 100 54V100';
 const AR=`<svg class="ar" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#f0e6d0"/></linearGradient><linearGradient id="gb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b7be0"/><stop offset="1" stop-color="#1a4aa8"/></linearGradient><linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6fdcd2"/><stop offset="1" stop-color="#0aa6a6"/></linearGradient></defs><path class="ab" d="${ARP}"/><path class="af" d="${ARP}Z"/><path class="al" d="${ARP}"/></svg>`;
 let HK='';
-const cur=()=>{const r=route();if(r.startsWith('p/')){const x=D&&posts().find(p=>String(p.id)===decodeURIComponent(r.slice(2)));return x?x.type:'home'}return TABS.includes(r)?r:'home'};
+const cur=()=>{const r=route();if(r.startsWith('p/')){const x=D&&findPost(decodeURIComponent(r.slice(2)));return x?x.type:'home'}return TABS.includes(r)?r:'home'};
 function moveInd(){const i=$('.ind');if(!i)return;const a=$('nav a[aria-current]');i.style.width=a?a.offsetWidth+'px':'0';if(a)i.style.transform=`translateX(${a.offsetLeft}px)`}
 function chrome(){const key=L+'|'+(D?D.profile.brandFa+pick(D.profile.tagline):'');
  if(key!==HK){HK=key;$('#hd').innerHTML=`<div class="tg">${L==='en'?'<span aria-current="true">EN</span>':'<button data-lang="en">EN</button>'}<span aria-hidden="true">|</span>${L==='fa'?'<span aria-current="true">فا</span>':'<button data-lang="fa">فا</button>'}</div><a class="mh" href="#home">${AR}<img class="logo" src="logo.png" decoding="async" fetchpriority="high" alt="${esc(D?.profile.brandFa||'شیبه')}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mark',lang:'fa',textContent:this.alt}))"><div class="meta"><p class="nm">${D?esc(nm()):''}</p><p class="tg2">${D?esc(pick(D.profile.tagline)):''}</p></div></a><nav aria-label="Main"><ul>${TABS.map(k=>`<li><a href="#${k}">${tlabel(k)}</a></li>`).join('')}<li class="ind" aria-hidden="true"></li></ul></nav><i class="prog"></i>`}
@@ -280,7 +284,7 @@ function trk(){const raw=String((D&&D.profile&&D.profile.goatcounter)||''),mm=ra
 function render(anim){try{render0(anim)}catch(e){console.error(e);const m=$('#main');if(m)m.innerHTML='<p class="wrap page" dir="ltr">Error: '+esc((e&&e.message)||e)+'</p>';document.querySelectorAll('.rv').forEach(x=>x.classList.add('in'))}}
 function render0(anim){T=U[L];const h=document.documentElement;h.lang=L;h.dir=L==='fa'?'rtl':'ltr';const r=route();document.body.classList.toggle('adm',r==='admin');if(r!=='admin'){document.body.classList.remove('sel');const mm=$('#main');mm.oninput=mm.onclick=mm.onchange=null}chrome();layout();
  if(!D){$('#main').innerHTML=`<p class="wrap page">${T.err}</p>`;return}
- const hx=r.startsWith('p/')?posts().find(p=>String(p.id)===decodeURIComponent(r.slice(2))):null;
+ const hx=r.startsWith('p/')?findPost(decodeURIComponent(r.slice(2))):null;
  robots(r==='admin'||(hx&&hx.listed===false)?'noindex,nofollow':'');
  if(r==='admin')return admin();
  $('#main').innerHTML=r==='about'?pages.about():r.startsWith('p/')?pages.post(decodeURIComponent(r.slice(2))):pages.feed(TY.includes(r)?r:'');
@@ -356,6 +360,7 @@ const PROMPT=`تو دستیار تنظیم محتوای یک وب‌لاگ شخ�
 - برای translation، url لینک محل انتشار ترجمه است. برای project، url لینک دمو و repo آدرس گیت‌هاب است.
 - آدرس‌ها کامل و با https:// باشند. آدرسی را که نمی‌دانی حدس نزن؛ رشته‌ی خالی بگذار.
 - در links آیتم اول دکمه‌ی «ارتباط با من» است؛ مهم‌ترین راه ارتباطی را اول بگذار.
+- slug اختیاری است: نشانی دلخواه پست، فقط با حروف انگلیسی کوچک، عدد و خط تیره (مثلاً my-post). اگر مطمئن نیستی، خالی بگذار.
 - فیلدهای id و image را نیاور (خودکار ساخته می‌شوند).
 - چیزی درباره‌ی من اختراع نکن؛ فقط از اطلاعاتی که می‌دهم استفاده کن. اگر اطلاعاتی کم بود، همان فیلد را خالی بگذار.
 
@@ -363,7 +368,7 @@ const PROMPT=`تو دستیار تنظیم محتوای یک وب‌لاگ شخ�
 {
  "profile": { "brandFa": "", "nameFa": "", "nameEn": "", "tagline": {"en": "", "fa": ""}, "bio": {"en": "", "fa": ""} },
  "links": [ { "label": "", "url": "" } ],
- "posts": [ { "type": "article", "title": {"fa": "", "en": ""}, "desc": {"fa": "", "en": ""}, "date": "", "listed": true, "body": "", "lang": "fa", "url": "", "repo": "" } ]
+ "posts": [ { "type": "article", "title": {"fa": "", "en": ""}, "desc": {"fa": "", "en": ""}, "date": "", "slug": "", "listed": true, "body": "", "lang": "fa", "url": "", "repo": "" } ]
 }
 
 JSON فعلی سایت (برای حفظ سبک و داده‌های موجود):
@@ -386,7 +391,7 @@ function importJson(){
  if(!add&&lists.length&&!confirm('این بخش‌ها با محتوای JSON جایگزین می‌شوند: '+lists.join('، ')+'\nادامه می‌دهی؟'))return;
  if(obj(j.profile)){merge(E.profile=E.profile||{},j.profile);['en','fa'].forEach(l=>{const v=E.profile.bio&&E.profile.bio[l];if(Array.isArray(v))E.profile.bio[l]=v.join('\n\n')});done.push('پروفایل')}
  if(links){E.links=add?[...links,...(E.links||[])]:links;done.push('لینک‌ها ('+links.length+')')}
- if(items.length){items.forEach(p=>{if(typeof p.title==='string')p.title={fa:p.title,en:''};p.id=p.id||nid();if(!TY.includes(p.type))p.type='article'});keepImg(items);E.posts=add?[...items,...(E.posts||[])]:items;done.push('پست‌ها ('+items.length+')')}
+ if(items.length){items.forEach(p=>{if(typeof p.title==='string')p.title={fa:p.title,en:''};p.id=p.id||nid();if(!TY.includes(p.type))p.type='article';p.slug=slugify(p.slug).replace(/-+$/,'');if(!p.slug||RESERVED.includes(p.slug))delete p.slug});keepImg(items);E.posts=add?[...items,...(E.posts||[])]:items;done.push('پست‌ها ('+items.length+')')}
  if(!done.length)return msg('هیچ بخش شناخته‌شده‌ای در JSON نبود (profile، links، posts)',1);
  OPEN='';dirty();if(items.length){TAB='posts';SEL=null}view();msg('اعمال شد: '+done.join('، ')+'. فرم‌ها را بررسی کن و بعد «ذخیره و انتشار» را بزن.')}
 const msg=(t,bad)=>toast(t,bad);
@@ -398,7 +403,8 @@ const t0=o=>typeof o==='string'?o:(o&&(o.fa||o.en))||'';
 const tname=k=>(TYP.find(x=>x[0]===k)||[,''])[1];
 const fd=d=>{try{return new Intl.DateTimeFormat('fa-IR-u-ca-persian',{dateStyle:'medium',timeZone:'UTC'}).format(new Date(d))}catch{return d}};
 const today=()=>new Date().toISOString().slice(0,10);
-const shareLink=id=>location.origin+location.pathname+'#p/'+encodeURIComponent(id);
+const hashLink=p=>location.origin+location.pathname+'#p/'+encodeURIComponent(p.slug||p.id);
+const shareLink=p=>p.slug?location.origin+'/'+p.slug:hashLink(p);
 const selIdx=()=>(E.posts||[]).findIndex(p=>p.id===SEL);
 function toast(t,bad){let el=$('#toast');if(!el){el=document.createElement('div');el.id='toast';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=t;el.className='toast show'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),bad?6500:3500)}
 function dirty(){DIRTY=true;const c=$('#dchip');if(c){c.textContent='تغییرات ذخیره‌نشده';c.className='chip warn'}const b=$('#asave');if(b&&!SAVING)b.disabled=false;clearTimeout(DT);DT=setTimeout(()=>ls.set('sheibah:draft',JSON.stringify(E)),500)}
@@ -411,7 +417,7 @@ function postsView(sel){
  const list=`<div class="plist"><div class="ptools"><input id="q" type="search" inputmode="search" placeholder="جستجو در پست‌ها…" value="${esc(Q)}"><div class="chips">${[['','همه'],...TYP].map(([k,n])=>`<button data-tf="${k}" class="${TF===k?'on':''}">${n}</button>`).join('')}</div></div>${l.length?l.map(({p})=>`<button class="prow${p.id===SEL?' on':''}" data-sel="${esc(p.id)}"><span class="th t-${p.type}">${thumb(p)}</span><span class="pt"><b dir="auto">${esc(t0(p.title)||'(بدون عنوان)')}</b><small>${tname(p.type)} · ${p.date?fd(p.date):'بدون تاریخ'}${p.listed===false?' · فقط با لینک':''}</small></span></button>`).join(''):'<p class="empty">پستی پیدا نشد.</p>'}</div>`;
  return `<div class="split${sel?' has':''}">${list}<div class="ped">${sel?editor(sel):'<div class="empty big">یک پست را انتخاب کن یا پست جدید بساز.</div>'}</div></div><button class="fab" data-add="1">+ پست جدید</button>`}
 
-function editor(p){const i=E.posts.indexOf(p),k=s=>`posts.${i}.${s}`,ty=p.type||'article',link=shareLink(p.id);
+function editor(p){const i=E.posts.indexOf(p),k=s=>`posts.${i}.${s}`,ty=p.type||'article',link=shareLink(p),hl=hashLink(p);
  const urlL=ty==='project'?'لینک دمو (وب‌اپ)':ty==='translation'?'لینک محل انتشار ترجمه':'لینک منبع اصلی (اختیاری)';
  return `<div class="ed"><div class="edbar"><button class="back" data-back="1">‹ فهرست</button><button class="btn ghost sm dg" data-act="del">حذف پست</button></div>
  <section class="card2"><h3>نوع و نمایش</h3><div class="seg" role="radiogroup">${TYP.map(([a,b])=>`<button type="button" role="radio" data-type="${a}" class="${ty===a?'on':''}">${b}</button>`).join('')}</div>
@@ -422,7 +428,9 @@ function editor(p){const i=E.posts.indexOf(p),k=s=>`posts.${i}.${s}`,ty=p.type||
   <div class="row2">${F(k('lang'),'زبان متن',{sel:[['fa','فارسی'],['en','English']]})}<label class="btn ghost sm upb">بارگذاری فایل .md<input type="file" id="mdone" accept=".md,.markdown,text/markdown,text/plain" hidden></label></div></section>
  <section class="card2"><h3>لینک‌ها</h3>${F(k('url'),urlL,{dir:'ltr',mode:'url',ph:'https://'})}${ty==='project'?F(k('repo'),'آدرس گیت‌هاب',{dir:'ltr',mode:'url',ph:'https://github.com/…'}):''}</section>
  <section class="card2"><h3>تصویر / آیکون</h3><div class="imgrow"><span class="th big t-${ty}">${thumb(p)}</span><div class="imgbtn"><button type="button" class="btn ghost sm" data-act="upimg">آپلود تصویر</button>${p.url&&ty==='project'?'<button type="button" class="btn ghost sm" data-act="icon">گرفتن آیکون از لینک</button>':''}${p.image?'<button type="button" class="btn ghost sm dg" data-act="rmimg">حذف تصویر</button>':''}</div><input type="file" id="imgf" accept="image/*" hidden></div>${F(k('image'),'یا آدرس تصویر',{dir:'ltr',mode:'url',ph:'img/… یا https://…'})}</section>
- <section class="card2"><h3>لینک اشتراک</h3><input class="lkbox" id="lk" readonly dir="ltr" value="${esc(link)}"><div class="imgbtn" style="margin-top:.6rem"><button type="button" class="btn sm" data-act="copy">کپی لینک</button><a class="btn ghost sm" href="${esc(link)}" target="_blank" rel="noopener">باز کردن</a></div><p class="muted" style="margin:.6rem 0 0">بعد از «ذخیره و انتشار»، حدود یک دقیقه طول می‌کشد تا لینک کار کند.</p></section></div>`}
+ <section class="card2"><h3>لینک اشتراک</h3>${F(k('slug'),'نشانی دلخواه (اختیاری؛ حروف انگلیسی کوچک، عدد و -)',{dir:'ltr',ph:'my-post'})}<input class="lkbox" id="lk" readonly dir="ltr" value="${esc(link)}"><div class="imgbtn" style="margin-top:.6rem"><button type="button" class="btn sm" data-act="copy">کپی لینک</button><a class="btn ghost sm" href="${esc(link)}" target="_blank" rel="noopener" id="lko">باز کردن</a></div>
+  <div id="lkb2"${p.slug?'':' hidden'}><p class="muted" style="margin:.8rem 0 .3rem">لینک کوتاه بالا فقط وقتی کار می‌کند که فایل <b dir="ltr">404.html</b> در ریپو باشد. لینک مستقیم زیر همیشه کار می‌کند:</p><input class="lkbox" id="lk2" readonly dir="ltr" value="${esc(hl)}"><div class="imgbtn" style="margin-top:.6rem"><button type="button" class="btn ghost sm" data-act="copy2">کپی لینک مستقیم</button></div></div>
+  <p class="muted" style="margin:.6rem 0 0">بعد از «ذخیره و انتشار»، حدود یک دقیقه طول می‌کشد تا لینک کار کند.</p></section></div>`}
 
 function profileView(){return `<div class="ped single"><section class="card2"><h3>هویت</h3>${F('profile.brandFa','نام برند (فارسی)')}${F('profile.nameFa','نام کامل (فارسی)')}${F('profile.nameEn','نام کامل (انگلیسی)',{dir:'ltr'})}</section>
  <section class="card2"><h3>شعار</h3>${F('profile.tagline.fa','فارسی')}${F('profile.tagline.en','انگلیسی',{dir:'ltr'})}</section>
@@ -454,6 +462,8 @@ async function save(){if(SAVING||!DIRTY)return;
  const bad=[E.links,E.posts].flatMap(a=>(a||[]).flatMap(x=>[x.url,x.repo])).find(u=>u&&!/^https?:\/\//i.test(u));
  if(bad)return toast('آدرس‌ها باید با https:// شروع شوند: '+bad,1);
  if((E.links||[]).some(l=>!l.url))return toast('هر لینک باید آدرس داشته باشد',1);
+ const seen=new Set();for(const p of(E.posts||[])){if(!p.slug)continue;p.slug=p.slug.replace(/-+$/,'');if(!p.slug){delete p.slug;continue}
+  const why=RESERVED.includes(p.slug)?'رزرو شده است':(seen.has(p.slug)||E.posts.some(x=>x!==p&&x.id===p.slug))?'تکراری است':'';if(why){TAB='posts';SEL=p.id;view();return toast('نشانی «'+p.slug+'» '+why,1)}seen.add(p.slug)}
  const nt=(E.posts||[]).find(p=>!t0(p.title).trim());if(nt){TAB='posts';SEL=nt.id;view();return toast('این پست عنوان ندارد',1)}
  SAVING=true;view();
  try{for(const pr of(E.posts||[])){if(pr.type==='project'&&pr.url&&!pr.image&&!TRIED.has(pr.url)){TRIED.add(pr.url);try{toast('در حال گرفتن آیکون '+t0(pr.title)+'…');pr.image=await iconFor(pr.url)}catch{}}}
@@ -463,7 +473,7 @@ async function save(){if(SAVING||!DIRTY)return;
 
 function attach(){const m=$('#main');
  m.oninput=e=>{const t=e.target;if(t.id==='q'){Q=t.value;view();const q=$('#q');q.focus();q.setSelectionRange(Q.length,Q.length);return}
-  const k=t.dataset.k;if(!k)return;set(E,k,t.type==='checkbox'?t.checked:t.value);dirty();if(t.hasAttribute('data-grow'))grow(t);
+  const k=t.dataset.k;if(!k)return;if(/\.slug$/.test(k)){const v=slugify(t.value);if(v!==t.value)t.value=v}set(E,k,t.type==='checkbox'?t.checked:t.value);dirty();if(/\.slug$/.test(k)){const p=E.posts.find(x=>x.id===SEL);if(p){const a=$('#lk'),b=$('#lko'),c=$('#lk2'),g=$('#lkb2');if(a)a.value=shareLink(p);if(b)b.href=shareLink(p);if(c)c.value=hashLink(p);if(g)g.hidden=!p.slug}}if(t.hasAttribute('data-grow'))grow(t);
   if(/^posts\.\d+\.title\./.test(k)){const p=E.posts.find(x=>x.id===SEL),b=$('.prow.on b');if(b&&p)b.textContent=t0(p.title)||'(بدون عنوان)'}};
  m.onchange=async e=>{const t=e.target,f=t.files&&t.files[0];if(!f)return;
   if(t.id==='impf'){f.text().then(x=>{$('#imp').value=x});return}
@@ -485,7 +495,8 @@ function attach(){const m=$('#main');
    if(d.act==='del'){if(confirm('این پست حذف شود؟')){E.posts.splice(i,1);SEL=null;dirty();view();toast('پست حذف شد. برای اعمال، ذخیره کن.')}return}
    if(d.act==='upimg'){$('#imgf').click();return}
    if(d.act==='rmimg'){p.image='';dirty();view();return}
-   if(d.act==='copy'){clip(shareLink(p.id),'لینک کپی شد ✓');return}
+   if(d.act==='copy'){clip(shareLink(p),'لینک کپی شد ✓');return}
+   if(d.act==='copy2'){clip(hashLink(p),'لینک مستقیم کپی شد ✓');return}
    if(d.act==='icon'){if(!p.url)return toast('اول لینک دمو را وارد کن',1);b.disabled=true;toast('در حال گرفتن آیکون از لینک…');try{p.image=await iconFor(p.url);dirty();view();toast('آیکون گرفته شد ✓')}catch(err){b.disabled=false;toast(err.message||'آیکون پیدا نشد',1)}return}}
   if(d.imp){importJson();return}
   if(d.prompt){clip(PROMPT.replace('{{JSON}}',()=>JSON.stringify(E,null,2)),'پرامپت کپی شد ✓ آخرش زیر «اطلاعات من» توضیحاتت را بنویس.');return}
