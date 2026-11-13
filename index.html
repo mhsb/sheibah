@@ -228,7 +228,7 @@ function robots(v){let m=$('meta[name=robots]');if(!v){m&&m.remove();return}if(!
 /* optional visitor stats: set profile.goatcounter to your GoatCounter code (hash routes are counted as /p/ID, /article ...) */
 let GC=0,TRd=0;
 function track(){try{trk()}catch{}}
-function trk(){const c=String((D&&D.profile&&D.profile.goatcounter)||'').trim().replace(/^https?:\/\//i,'').replace(/\.goatcounter\.com.*$/i,'');if(!c||!/^[a-z0-9-]+$/i.test(c)||route()==='admin')return;
+function trk(){const raw=String((D&&D.profile&&D.profile.goatcounter)||''),mm=raw.match(/([a-z0-9-]+)\.goatcounter\.com/i),c=mm?mm[1]:raw.trim();if(!c||!/^[a-z0-9-]+$/i.test(c)||route()==='admin')return;
  if(!GC){GC=1;window.goatcounter={no_onload:true};const sc=document.createElement('script');sc.async=true;sc.src='https://gc.zgo.at/count.js';sc.dataset.goatcounter='https://'+c+'.goatcounter.com/count';document.head.appendChild(sc)}
  let n=0;const send=()=>window.goatcounter&&window.goatcounter.count?window.goatcounter.count({path:'/'+(location.hash||'#home').slice(1),title:document.title}):n++<20&&setTimeout(send,300);send()}
 function render(anim){try{render0(anim)}catch(e){console.error(e);const m=$('#main');if(m)m.innerHTML='<p class="wrap page" dir="ltr">Error: '+esc((e&&e.message)||e)+'</p>';document.querySelectorAll('.rv').forEach(x=>x.classList.add('in'))}}
