@@ -37,6 +37,23 @@
     {
       "type": "project",
       "title": {
+        "fa": "رساله آموزشی",
+        "en": "Resaleh Amuzeshi"
+      },
+      "desc": {
+        "fa": "یک وب‌اپ آفلاین (PWA) برای خواندن و یادگیری احکام و مسائل شرعی روزمره؛ شامل ۷۷ درس و ۵۰ بخش موضوعی که پس از نخستین بازدید روی دستگاه ذخیره می‌شود.",
+        "en": "An offline-capable PWA for reading and learning everyday Islamic rulings and practical laws, featuring 77 lessons and 50 topical sections stored on the device after the first visit."
+      },
+      "date": "2026-11-14",
+      "slug": "resaleh",
+      "listed": true,
+      "url": "https://mhsb.github.io/resaleh",
+      "repo": "https://github.com/mhsb/resaleh",
+      "id": "u8nhqmzh"
+    },
+    {
+      "type": "project",
+      "title": {
         "fa": "دفترچه واژه‌یاب",
         "en": "Dictionary Notebook"
       },
@@ -98,7 +115,8 @@
       "url": "https://mhsb.github.io/compeng/",
       "repo": "https://github.com/mhsb/compeng",
       "date": "",
-      "id": "mw7p09iz4ie"
+      "id": "mw7p09iz4ie",
+      "slug": "compeng"
     },
     {
       "type": "project",
@@ -114,7 +132,8 @@
       "repo": "https://github.com/mhsb/jamejamojur",
       "date": "",
       "id": "mw7p09izepg",
-      "image": "img/p-1794133429481.webp"
+      "image": "img/p-1794133429481.webp",
+      "slug": "jamejamojur"
     },
     {
       "type": "project",
@@ -145,7 +164,8 @@
       "repo": "https://github.com/mhsb/sunclock",
       "date": "",
       "id": "mw7p09iz4ah",
-      "image": "img/p-1793801018211.webp"
+      "image": "img/p-1793801018211.webp",
+      "slug": "sunclock"
     },
     {
       "type": "project",
@@ -161,7 +181,8 @@
       "repo": "https://github.com/mhsb/inarobegir",
       "date": "",
       "id": "mw7p09izr8o",
-      "image": "img/p-1793800987855.webp"
+      "image": "img/p-1793800987855.webp",
+      "slug": "inarobegir"
     },
     {
       "type": "project",
